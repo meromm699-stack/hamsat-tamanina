@@ -1,12 +1,11 @@
 {
-  "name": "همسة طمأنينة | Hamsat Tamanina",
-  "short_name": "همسة طمأنينة",
-  "description": "كروت طمأنينة، قصص، ورد، أذكار - همسة يومية لقلبك",
-  "start_url": "index.html",
+  "name": "همسة طمأنينة",
+  "short_name": "همسة",
+  "description": "همسة طمأنينة - تصبحوا على كل حاجة جميلة",
+  "start_url": "./",
   "display": "standalone",
-  "background_color": "#FFF8F3",
-  "theme_color": "#A9636C",
-  "orientation": "portrait",
+  "background_color": "#FFF8F0",
+  "theme_color": "#D8B5FF",
   "icons": [
     {
       "src": "icon-192.png",
@@ -19,6 +18,12 @@
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
+    },
+    {
+      "src": "icon-180.png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "any"
     }
   ]
 }
