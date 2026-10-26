@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>همسة طمأنينة</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#A9636C">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="همسة طمأنينة">
+<link rel="apple-touch-icon" href="icon-192.png">
+<title>همسة طمأنينة</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Aref+Ruqaa:wght@400;700&family=Amiri+Quran&family=Noto+Naskh+Arabic:wght@500;700&family=Tajawal:wght@500;700&display=swap" rel="stylesheet">
+<style>
+/* Layout: one calm column on soft washes; five tabs (همسة، قصص، ورد، هدية، أنا); six palettes retheme everything.
+   Single-look page by choice: every color is a token and the background is explicit. */
+:root{
+  --bg:#FFF8F3; --card:#FFFDFB; --fg:#5D4E5A; --muted:#7A6A76;
+  --accent:#A9636C; --on-accent:#FFFFFF; --soft:#F6E3E0; --line:#EBDAD3;
+  --wash1:#F4D9D4; --wash2:#E3E8D6; --shadow:0 12px 32px rgba(93,78,90,.10);
+  --f-display:'Aref Ruqaa','Tajawal',serif;
+  --f-body:'Tajawal','Noto Naskh Arabic',system-ui,sans-serif;
+  --f-quran:'Amiri Quran','Noto Naskh Arabic',serif;
+  --f-story:'Tajawal','Noto Naskh Arabic',system-ui,sans-serif;
+}
+:root[data-palette="sage"]{--bg:#F6F8F0;--card:#FCFDF8;--fg:#4F5A4E;--muted:#667262;--accent:#5E7A55;--soft:#E4ECD9;--line:#D8E1CB;--wash1:#DDE8CF;--wash2:#F2E6D8;--shadow:0 12px 32px rgba(79,90,78,.10)}
+:root[data-palette="rose"]{--bg:#FCF3F2;--card:#FFFBFA;--fg:#5E4B50;--muted:#7D6A70;--accent:#A45B66;--soft:#F5DEDF;--line:#EBD3D5;--wash1:#F1CDD0;--wash2:#F7E6D6;--shadow:0 12px 32px rgba(94,75,80,.10)}
+:root[data-palette="sky"]{--bg:#F3F8FA;--card:#FBFDFE;--fg:#4B5A66;--muted:#62758A;--accent:#46738F;--soft:#DEEBF2;--line:#D2E2EB;--wash1:#D2E5EF;--wash2:#F3E4E0;--shadow:0 12px 32px rgba(75,90,102,.10)}
+:root[data-palette="lilac"]{--bg:#F8F4F9;--card:#FDFAFE;--fg:#594A62;--muted:#76668A;--accent:#8A5F94;--soft:#EBDDF0;--line:#E1D3E7;--wash1:#E4D3EC;--wash2:#F7E5DD;--shadow:0 12px 32px rgba(89,74,98,.10)}
+:root[data-palette="dusk"]{--bg:#403744;--card:#4A4050;--fg:#F6ECE6;--muted:#CDBFC8;--accent:#E3B3A8;--on-accent:#3F3036;--soft:#57495B;--line:#66576A;--wash1:#5A4660;--wash2:#44505A;--shadow:0 12px 32px rgba(20,12,24,.35);color-scheme:dark}
+
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--fg);font-family:var(--f-body);font-weight:500;font-size:17px;line-height:1.85;
+  padding-block:0;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));
+  transition:background .6s ease,color .6s ease;overflow-x:hidden;position:relative;min-height:100vh}
+body::before,body::after{content:"";position:fixed;z-index:0;width:min(90vw,520px);aspect-ratio:1;border-radius:50%;filter:blur(60px);opacity:.75;pointer-events:none}
+body::before{top:-14vw;inset-inline-start:-18vw;background:radial-gradient(circle,var(--wash1),transparent 68%)}
+body::after{bottom:-16vw;inset-inline-end:-18vw;background:radial-gradient(circle,var(--wash2),transparent 68%)}
+#app{position:relative;z-index:1;max-width:680px;margin:0 auto;padding-block:20px 40px;display:flex;flex-direction:column;gap:20px}
+h1,h2,h3,p{margin:0}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:3px solid var(--accent);outline-offset:3px;border-radius:12px}
+
+header{text-align:center;display:flex;flex-direction:column;gap:6px;align-items:center;padding-top:6px}
+.topline{text-align:center;color:var(--accent);font-weight:700;font-size:17px;line-height:1.8;margin:0 0 2px;padding-top:8px}
+.brand{font-family:var(--f-display);font-weight:700;font-size:clamp(38px,11vw,54px);line-height:1.3;color:var(--accent);text-wrap:balance}
+.brand-en{font-size:13px;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);font-weight:700}
+.tagline{max-width:34ch;font-size:17px;text-wrap:balance}
+.palettes{display:flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap;margin-top:6px}
+.palettes span{font-size:13px;color:var(--muted);font-weight:700}
+.dot{width:30px;height:30px;border-radius:50%;border:3px solid var(--card);box-shadow:0 0 0 2px var(--line);padding:0}
+.dot[aria-pressed="true"]{box-shadow:0 0 0 3px var(--accent)}
+
+nav{display:grid;grid-template-columns:repeat(5,1fr);gap:4px;background:var(--soft);padding:6px;border-radius:999px}
+nav button{border:0;background:transparent;padding:10px 2px;border-radius:999px;font-weight:700;font-size:15px;min-height:46px;color:var(--muted);transition:background .25s,color .25s}
+nav button[aria-selected="true"]{background:var(--card);color:var(--accent);box-shadow:var(--shadow)}
+
+section[hidden]{display:none!important}
+.panel{display:flex;flex-direction:column;gap:18px}
+.card{background:var(--card);border-radius:28px;box-shadow:var(--shadow);padding:22px 20px;border:1px solid var(--line)}
+.card h2{font-family:var(--f-display);font-size:26px;font-weight:700;color:var(--accent);margin-bottom:6px;line-height:1.5;text-wrap:balance}
+.hint{color:var(--muted);font-size:15px}
+
+.chips{display:flex;flex-wrap:wrap;gap:10px;margin:14px 0}
+.chip{border:1.5px solid var(--line);background:var(--soft);border-radius:999px;padding:8px 16px;font-weight:700;font-size:16px;min-height:44px;transition:transform .2s,background .2s}
+.chip:hover{transform:translateY(-2px)}
+.chip[aria-pressed="true"]{background:var(--accent);color:var(--on-accent);border-color:var(--accent)}
+textarea,input[type=text]{width:100%;border-radius:22px;border:1.5px solid var(--line);background:var(--bg);color:var(--fg);font:inherit;font-weight:500;padding:12px 16px;line-height:1.8}
+textarea{min-height:110px;resize:vertical}
+textarea::placeholder,input::placeholder{color:var(--muted);opacity:.9}
+.btn{border:0;background:var(--accent);color:var(--on-accent);border-radius:999px;padding:12px 26px;font-weight:700;font-size:17px;min-height:48px;box-shadow:var(--shadow);transition:transform .2s;text-decoration:none;display:inline-flex;align-items:center}
+.btn:hover{transform:translateY(-2px)}
+.btn.ghost{background:var(--soft);color:var(--accent);box-shadow:none}
+.btn:disabled{opacity:.55;cursor:default}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:12px}
+
+.reply{display:flex;flex-direction:column;gap:14px;animation:rise .7s ease both}
+.reply .hug{font-family:var(--f-display);font-size:24px;line-height:1.8;color:var(--accent)}
+.reply .end{font-weight:700;color:var(--accent);padding-top:12px;border-top:1px dashed var(--line);text-align:center}
+.verse{font-family:var(--f-quran);font-size:26px;line-height:2.2;text-align:center;text-wrap:balance}
+.frame{position:relative;border:2px solid var(--accent);border-radius:26px;padding:26px 18px 20px;background:var(--bg);box-shadow:inset 0 0 0 5px var(--card),inset 0 0 0 6.5px var(--line)}
+.frame svg.fl{position:absolute;inset-inline-start:50%;top:-14px;transform:translateX(50%);width:30px;height:30px;background:var(--card);border-radius:50%}
+.ref{text-align:center;color:var(--accent);font-weight:700;font-size:14px;margin-top:2px}
+.meaning{margin-top:12px;font-size:16px;color:var(--fg);background:var(--soft);border-radius:20px;padding:12px 16px}
+.alert{background:var(--soft);border:1.5px solid var(--accent);border-radius:22px;padding:16px 18px}
+.alert b{color:var(--accent)}
+.num{font-weight:700;font-size:22px;direction:ltr;unicode-bidi:isolate;user-select:all;letter-spacing:.08em}
+
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px}
+.mini{border:1.5px solid var(--line);background:var(--card);border-radius:24px;padding:16px 14px;font-family:var(--f-quran);font-size:19px;line-height:2;text-align:center;min-width:0;transition:transform .2s,border-color .2s}
+.mini:hover{transform:translateY(-2px);border-color:var(--accent)}
+
+.tasbeeh{display:flex;flex-direction:column;align-items:center;gap:12px}
+.ring{position:relative;width:min(70vw,250px);aspect-ratio:1}
+.ring svg{width:100%;height:100%;transform:rotate(-90deg)}
+.ring .bg{stroke:var(--soft)}
+.ring .fg{stroke:var(--accent);transition:stroke-dashoffset .25s ease}
+.tap{position:absolute;inset:16%;border-radius:50%;border:0;background:var(--accent);color:var(--on-accent);font-weight:700;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;box-shadow:var(--shadow);transition:transform .12s}
+.tap:active{transform:scale(.96)}
+.tap strong{font-size:44px;line-height:1.1;font-variant-numeric:tabular-nums}
+.tap span{font-size:15px}
+.total{color:var(--muted);font-size:15px}
+
+.names{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;margin-top:12px}
+.name{background:var(--soft);border-radius:22px;padding:14px 16px;min-width:0}
+.name b{font-family:var(--f-display);font-size:22px;color:var(--accent);display:block}
+
+/* stories */
+.stories{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px}
+.scard{text-align:start;border:1.5px solid var(--line);background:var(--card);border-radius:28px;padding:18px 18px 16px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:6px;min-width:0;transition:transform .2s}
+.scard:hover{transform:translateY(-3px)}
+.scard b{font-family:var(--f-display);font-size:22px;color:var(--accent);line-height:1.6}
+.scard small{color:var(--muted);font-size:14px}
+.reader{display:flex;flex-direction:column;gap:16px;font-family:var(--f-story);font-size:18px;line-height:2.05}
+.reader h2{font-size:30px}
+.reader .quote{border-inline-start:4px solid var(--accent);background:var(--soft);border-radius:18px;padding:12px 16px;font-size:18px}
+.reader .quote small{display:block;color:var(--accent);font-weight:700;font-size:14px;margin-top:4px}
+.endbox{background:var(--soft);border-radius:24px;padding:16px 18px;text-align:center;font-family:var(--f-display);font-size:22px;color:var(--accent);line-height:1.9}
+details.m{margin-top:10px}
+details.m summary{cursor:pointer;color:var(--accent);font-weight:700;text-align:center;list-style:none;padding:6px}
+details.m summary::-webkit-details-marker{display:none}
+.hadith{border:1.5px solid var(--line);border-radius:24px;padding:16px 18px;background:var(--card);margin-top:12px}
+.hadith .ht{font-family:var(--f-quran);font-size:22px;line-height:2.1}
+.hadith .hs{color:var(--accent);font-weight:700;font-size:14px;margin-top:4px}
+.hadithText{font-family:var(--f-quran);font-size:21px;line-height:2.1;text-align:center;text-wrap:balance}
+
+/* gift */
+.gift{display:flex;flex-direction:column;gap:14px}
+.stick{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+.stick button{border:2px solid var(--line);background:var(--card);border-radius:20px;padding:6px;aspect-ratio:1;min-width:0;display:flex}
+.stick button[aria-pressed="true"]{border-color:var(--accent);background:var(--soft)}
+.stick img{width:100%;height:100%;object-fit:contain}
+.cwrap{display:flex;justify-content:center}
+#giftCanvas{width:min(100%,380px);aspect-ratio:4/5;height:auto;border-radius:24px;box-shadow:var(--shadow);background:var(--bg)}
+.lab{font-weight:700;font-size:15px;color:var(--accent)}
+select{width:100%;border-radius:22px;border:1.5px solid var(--line);background:var(--bg);color:var(--fg);font:inherit;padding:12px 16px}
+
+.faces{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-top:14px}
+.face{border:1.5px solid var(--line);background:var(--card);border-radius:22px;padding:10px 2px;display:flex;flex-direction:column;align-items:center;gap:4px;font-size:13px;font-weight:700;color:var(--muted);min-width:0}
+.face svg{width:44px;height:44px;color:var(--accent)}
+.face[aria-pressed="true"]{border-color:var(--accent);background:var(--soft);color:var(--accent)}
+footer{font-size:14px;color:var(--muted);text-align:center;display:flex;flex-direction:column;gap:6px;padding-top:8px}
+footer .num{font-size:16px}
+@keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+@media (max-width:420px){body{font-size:16px}.faces{gap:5px}.face{font-size:12px}.verse{font-size:23px}.reader{font-size:17px}nav button{font-size:14px}.stick{gap:6px}}
+</style>
+
+<div id="app" dir="rtl" lang="ar">
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <symbol id="flower" viewBox="0 0 30 30"><g fill="var(--accent)" opacity=".85"><circle cx="15" cy="7" r="4.4"/><circle cx="22.6" cy="12.5" r="4.4"/><circle cx="19.7" cy="21.4" r="4.4"/><circle cx="10.3" cy="21.4" r="4.4"/><circle cx="7.4" cy="12.5" r="4.4"/></g><circle cx="15" cy="15" r="3.6" fill="var(--card)"/></symbol>
+  </svg>
+
+  <p class="topline">اللهم اجعل هذا العمل خالصا لوجهك الكريم</p>
+  <header>
+    <h1 class="brand">همسة طمأنينة</h1>
+    <div class="brand-en">Hamsat Tamanina</div>
+    <p class="tagline">مساحة آمنة تثبت قلبك وروحك 🕊️ ✨ أنا هنا جنبك، ونتكلم بالراحة لحد ما قلبك يطمن</p>
+    <div class="palettes" role="group" aria-label="ألوان الموقع">
+      <span>اختاري ألوانك</span>
+      <button class="dot" data-p="cream" aria-pressed="true" aria-label="كريمي" style="background:#F4D9D4"></button>
+      <button class="dot" data-p="sage" aria-pressed="false" aria-label="أخضر هادئ" style="background:#C9D9B8"></button>
+      <button class="dot" data-p="rose" aria-pressed="false" aria-label="وردي ترابي" style="background:#E3B3B6"></button>
+      <button class="dot" data-p="sky" aria-pressed="false" aria-label="أزرق سماوي" style="background:#BCD6E4"></button>
+      <button class="dot" data-p="lilac" aria-pressed="false" aria-label="ليلكي" style="background:#D9C5E3"></button>
+      <button class="dot" data-p="dusk" aria-pressed="false" aria-label="مسائي" style="background:#5A4660"></button>
+    </div>
+  </header>
+
+  <nav role="tablist" aria-label="الأقسام">
+    <button role="tab" id="t-hamsa" data-tab="hamsa" aria-selected="true">همسة</button>
+    <button role="tab" id="t-qesas" data-tab="qesas" aria-selected="false">قصص</button>
+    <button role="tab" id="t-ward" data-tab="ward" aria-selected="false">ورد</button>
+    <button role="tab" id="t-hadya" data-tab="hadya" aria-selected="false">هدية</button>
+    <button role="tab" id="t-ana" data-tab="ana" aria-selected="false">أنا</button>
+  </nav>
+
+  <section class="panel" id="p-hamsa" role="tabpanel" aria-labelledby="t-hamsa">
+    <div class="card">
+      <h2>احكي لي.. حاسة بإيه دلوقتي؟</h2>
+      <p class="hint">اختاري حالتك، أو اكتبي اللي في قلبك، وهتلاقي كلام يطمنك.</p>
+      <div class="chips" id="chips"></div>
+      <label for="story" class="hint">أو اكتبي بكلامك</label>
+      <textarea id="story" placeholder="احكي لي.. حاسة بإيه دلوقتي؟"></textarea>
+      <div class="row"><button class="btn" id="send">طمنيني</button></div>
+    </div>
+    <div class="card" id="replyCard" hidden aria-live="polite"></div>
+  </section>
+
+  <section class="panel" id="p-qesas" role="tabpanel" aria-labelledby="t-qesas" hidden>
+    <div class="card" id="storiesHead">
+      <h2>حكايات تثبّت القلب</h2>
+      <p class="hint">قصص الأنبياء وصالحات من القرآن والسنة، بالآيات ومعناها، والأحاديث وشرحها، تُقرأ على مهل.</p>
+    </div>
+    <div class="stories" id="storyList"></div>
+    <article class="card reader" id="reader" hidden></article>
+  </section>
+
+  <section class="panel" id="p-ward" role="tabpanel" aria-labelledby="t-ward" hidden>
+    <div class="card">
+      <h2>آية تطمنك دلوقتي</h2>
+      <div class="frame" id="featured"><svg class="fl" aria-hidden="true"><use href="#flower"/></svg><p class="verse" id="featuredText"></p><p class="ref" id="featuredRef"></p></div>
+      <p class="meaning" id="featuredMeaning"></p>
+      <div class="row" style="justify-content:center"><button class="btn" id="newVerse">آية تطمنك دلوقتي</button></div>
+    </div>
+    <div class="card">
+      <h2>حديث يطمنك</h2>
+      <p class="hint">حديث واحد في كل مرة، مع شرح يفتح القلب.</p>
+      <div class="frame"><p class="hadithText" id="hdText"></p><p class="ref" id="hdSrc"></p></div>
+      <p class="meaning" id="hdMean"></p>
+      <div class="row" style="justify-content:center"><button class="btn" id="newHadith">حديث تاني</button></div>
+    </div>
+    <div class="card">
+      <h2>دعاء من القرآن</h2>
+      <p class="hint">دعوات من القرآن الكريم، دعوة واحدة في كل مرة.</p>
+      <div class="frame"><p class="verse" id="qdText"></p><p class="ref" id="qdRef"></p></div>
+      <p class="meaning" id="qdMean"></p>
+      <div class="row" style="justify-content:center"><button class="btn" id="newQDua">دعاء تاني</button></div>
+    </div>
+    <div class="card">
+      <h2>أذكار</h2>
+      <p class="hint">اختاري الوقت اللي إنتي فيه.</p>
+      <div class="chips" id="adkChips" style="justify-content:center"></div>
+      <div class="frame"><p class="hadithText" id="adkText"></p><p class="ref" id="adkRef"></p></div>
+      <p class="meaning" id="adkMean"></p>
+      <div class="row" style="justify-content:center;align-items:center"><span class="total" id="adkCount"></span><button class="btn" id="adkNext">الذكر اللي بعده</button></div>
+    </div>
+    <div class="card">
+      <h2>سبحة</h2>
+      <div class="chips" id="dhikrChips" style="justify-content:center"></div>
+      <div class="tasbeeh">
+        <div class="ring">
+          <svg viewBox="0 0 120 120" aria-hidden="true"><circle class="bg" cx="60" cy="60" r="54" fill="none" stroke-width="8"/><circle class="fg" id="arc" cx="60" cy="60" r="54" fill="none" stroke-width="8" stroke-linecap="round"/></svg>
+          <button class="tap" id="tap" aria-label="عدّ"><strong id="count">٠</strong><span id="dhikrName">سبحان الله</span></button>
+        </div>
+        <div class="total" id="total"></div>
+        <button class="btn ghost" id="reset">ابدأي من جديد</button>
+      </div>
+    </div>
+    <div class="card">
+      <h2>لأنكِ الله</h2>
+      <p class="hint">من أسماء الله الحسنى، بكلام بسيط يثبّت القلب.</p>
+      <div class="names" id="names"></div>
+      <div class="row" style="justify-content:center"><button class="btn" id="moreNames">أسماء أكتر</button></div>
+    </div>
+    <div class="card">
+      <h2>كل الآيات</h2>
+      <div class="grid" id="verseGrid"></div>
+    </div>
+  </section>
+
+  <section class="panel" id="p-hadya" role="tabpanel" aria-labelledby="t-hadya" hidden>
+    <div class="card gift">
+      <h2>هدية همسة 🎁</h2>
+      <p class="hint">اكتبي الاسم، واختاري الخلفية والاستيكر والعبارة، وهيطلع كارت جاهز تبعتيه.</p>
+      <label class="lab" for="gName">الاسم</label>
+      <input type="text" id="gName" maxlength="24" placeholder="مثلاً: مريم" autocomplete="off">
+      <span class="lab">الخلفية</span>
+      <div class="chips" id="themePick"></div>
+      <span class="lab">الاستيكر</span>
+      <div class="stick" id="stickPick"></div>
+      <span class="lab">الخط</span>
+      <div class="chips" id="fontPick"></div>
+      <label class="lab" for="gPhrase">العبارة</label>
+      <select id="gPhrase"></select>
+      <label class="lab" for="gOwn">أو اكتبي عبارتك، وحطي {n} مكان الاسم</label>
+      <input type="text" id="gOwn" maxlength="140" placeholder="مثلاً: يا {n}، ربنا معاكِ في كل خطوة" autocomplete="off">
+      <div class="cwrap"><div id="giftCardWrap"><canvas id="giftCanvas" width="1080" height="1350" aria-label="معاينة الكارت"></canvas></div></div>
+      <div class="row" style="justify-content:center">
+        <button class="btn" id="gSavePng">حمّلي PNG (أعلى جودة)</button>
+        <button class="btn ghost" id="gSaveJpg">حمّلي JPG</button>
+      </div>
+      <p class="hint" id="gNote" style="text-align:center"></p>
+    </div>
+  </section>
+
+  <section class="panel" id="p-ana" role="tabpanel" aria-labelledby="t-ana" hidden>
+    <div class="card">
+      <h2>عاملة إيه دلوقتي؟</h2>
+      <p class="hint">اختاري الوش اللي يشبه إحساسك.</p>
+      <div class="faces" id="faces"></div>
+      <div id="faceReply" aria-live="polite" style="margin-top:14px"></div>
+    </div>
+  </section>
+
+  <footer>
+    <p>الردود هنا مكتوبة مسبقاً بحب، مش محادثة مع شخص.</p>
+    <p>الخط الساخن للصحة النفسية: <span class="num">16328</span> (مجاني، على مدار الساعة).</p>
+    <p>همسة طمأنينة | Hamsat Tamanina 🤍</p>
+  </footer>
+</div>
+
+<script>
+/* ===== آيات (النصوص من Quran.com، رواية حفص، بالتشكيل) ===== */
+var V={
+v1328:{t:"الَّذِينَ آمَنُوا وَتَطْمَئِنُّ قُلُوبُهُم بِذِكْرِ اللَّهِ ۗ أَلَا بِذِكْرِ اللَّهِ تَطْمَئِنُّ الْقُلُوبُ",r:"سورة الرعد ٢٨",m:"ذكر الله يملأ القلب سكينة. فالطمأنينة الحقيقية ليست في كثرة ما حولنا من أشياء، بل في صلة القلب بخالقه، وكل قلب تعب يجد عنده راحته."},
+v1597:{t:"وَلَقَدْ نَعْلَمُ أَنَّكَ يَضِيقُ صَدْرُكَ بِمَا يَقُولُونَ",r:"سورة الحجر ٩٧",m:"ربنا يعلم أن صدر نبيّه ﷺ ضاق من كلام الناس، فلم يتركه وحده مع ضيقه. والآية التي بعدها مباشرة جاءت بالدواء: التسبيح والسجود. فالله يرى الضيق ويعرف سببه."},
+v2187:{t:"لَّا إِلَٰهَ إِلَّا أَنتَ سُبْحَانَكَ إِنِّي كُنتُ مِنَ الظَّالِمِينَ",r:"سورة الأنبياء ٨٧",m:"دعاء يونس عليه السلام في ظلمات ثلاث: ظلمة الليل وظلمة البحر وظلمة بطن الحوت. فيه توحيد وتنزيه واعتراف، وكانت نتيجته النجاة من الغم، ووعد الله أن يكون ذلك لكل مؤمن."},
+v1964:{t:"وَمَا كَانَ رَبُّكَ نَسِيًّا",r:"سورة مريم ٦٤",m:"ربنا لا ينسى أحدًا. إذا تأخر شيء فليس هذا نسيانًا، فكل شيء عنده بميزان وموعد، وعلمه لا يغفل عن أحد."},
+v945:{t:"فَإِنَّ مَعَ الْعُسْرِ يُسْرًا ۝ إِنَّ مَعَ الْعُسْرِ يُسْرًا",r:"سورة الشرح ٥ - ٦",m:"قال الله «مع» ولم يقل «بعد». فاليسر يرافق الضيق من أول لحظة ويكبر داخله. وتكرار الجملة تثبيت للقلب ووعد مؤكد."},
+v940:{t:"لَا تَحْزَنْ إِنَّ اللَّهَ مَعَنَا",r:"سورة التوبة ٤٠",m:"قالها النبي ﷺ لصاحبه أبي بكر وهما في الغار والخطر قريب. هي معية خاصة بالحفظ والنصر، ولها وقع على القلب في كل موقف يشتد فيه الخوف."},
+v7156:{t:"وَرَحْمَتِي وَسِعَتْ كُلَّ شَيْءٍ",r:"سورة الأعراف ١٥٦",m:"لا يوجد شيء خارج رحمة الله. هي أوسع من الذنب وأوسع من الخوف وأوسع من كل ما يضيق به القلب."},
+v756:{t:"إِنَّ رَحْمَتَ اللَّهِ قَرِيبٌ مِّنَ الْمُحْسِنِينَ",r:"سورة الأعراف ٥٦",m:"رحمة الله قريبة، وليست بعيدة المنال. وكل من يحسن ويصلح ويحاول بقلب صادق تحيط به هذه الرحمة."},
+v2286:{t:"لَا يُكَلِّفُ اللَّهُ نَفْسًا إِلَّا وُسْعَهَا",r:"سورة البقرة ٢٨٦",m:"ربنا أعلم بطاقة كل نفس. كل ما يحمّله الله لعبده فهو قادر على حمله بإذنه، فهو سبحانه لا يضع على أحد فوق ما يطيق."},
+v933:{t:"مَا وَدَّعَكَ رَبُّكَ وَمَا قَلَىٰ",r:"سورة الضحى ٣",m:"نزلت حين تأخر الوحي على النبي ﷺ أيامًا فحزن، فجاءه الجواب: ما تركك ربك وما كرهك. فأي تأخير لا يعني هجرًا ولا غضبًا."},
+v935:{t:"وَلَسَوْفَ يُعْطِيكَ رَبُّكَ فَتَرْضَىٰ",r:"سورة الضحى ٥",m:"وعد بعطاء من الله حتى يصل القلب إلى الرضا. ليس عطاء عادياً، بل عطاء يملأ صاحبه رضًا وسعادة."},
+v1286:{t:"قَالَ إِنَّمَا أَشْكُو بَثِّي وَحُزْنِي إِلَى اللَّهِ وَأَعْلَمُ مِنَ اللَّهِ مَا لَا تَعْلَمُونَ",r:"سورة يوسف ٨٦",m:"قالها يعقوب عليه السلام وهو يحمل حزنًا كبيرًا. الشكوى إلى الله لا تنافي الصبر الجميل، بل هي من أجمل صوره، فهو يشكو لمن يملك الفرج."},
+v1287:{t:"وَلَا تَيْأَسُوا مِن رَّوْحِ اللَّهِ",r:"سورة يوسف ٨٧",m:"«الرَّوْح» هو الفرج والرحمة بعد الشدة. قالها يعقوب لأبنائه وهو لا يعرف كيف سيأتي الفرج، لكنه كان على يقين من أنه آتٍ."},
+v12100:{t:"إِنَّ رَبِّي لَطِيفٌ لِّمَا يَشَاءُ ۚ إِنَّهُ هُوَ الْعَلِيمُ الْحَكِيمُ",r:"سورة يوسف ١٠٠",m:"اللطيف هو الذي يدبّر الأمور برفق وخفاء، فيوصل الخير من طرق لا يتوقعها أحد. قالها يوسف بعد سنوات البئر والسجن، وهي خلاصة رحلته كلها."},
+v3953:{t:"لَا تَقْنَطُوا مِن رَّحْمَةِ اللَّهِ",r:"سورة الزمر ٥٣",m:"نداء من الله لعباده الذين أخطأوا: لا تفقدوا الأمل في رحمتي، فهي تسع الذنب مهما كبر. وبعدها بيّن سبحانه أنه يغفر الذنوب جميعاً لمن رجع إليه."},
+v2186:{t:"وَإِذَا سَأَلَكَ عِبَادِي عَنِّي فَإِنِّي قَرِيبٌ ۖ أُجِيبُ دَعْوَةَ الدَّاعِ إِذَا دَعَانِ",r:"سورة البقرة ١٨٦",m:"جاء الجواب هنا مباشرة من الله، دون أن يقول: قل. «فإني قريب». قرب بالسمع والعلم والإجابة، لا يحتاج إلى وسيط ولا إلى وقت معيّن."},
+v2183:{t:"وَأَيُّوبَ إِذْ نَادَىٰ رَبَّهُ أَنِّي مَسَّنِيَ الضُّرُّ وَأَنتَ أَرْحَمُ الرَّاحِمِينَ",r:"سورة الأنبياء ٨٣",m:"دعاء أيوب عليه السلام في بلائه. لم يسأل صراحة، بل عرض حاله وأثنى على ربه بأنه أرحم الراحمين. وهذا أدب عظيم في الدعاء."},
+v3844:{t:"إِنَّا وَجَدْنَاهُ صَابِرًا ۚ نِّعْمَ الْعَبْدُ ۖ إِنَّهُ أَوَّابٌ",r:"سورة ص ٤٤",m:"شهادة من الله لأيوب بالصبر وبأنه «أوّاب»، أي كثير الرجوع إلى ربه. هكذا يرى الله من صبر عليه: نعم العبد."},
+v287:{t:"وَأَوْحَيْنَا إِلَىٰ أُمِّ مُوسَىٰ أَنْ أَرْضِعِيهِ ۖ فَإِذَا خِفْتِ عَلَيْهِ فَأَلْقِيهِ فِي الْيَمِّ وَلَا تَخَافِي وَلَا تَحْزَنِي ۖ إِنَّا رَادُّوهُ إِلَيْكِ وَجَاعِلُوهُ مِنَ الْمُرْسَلِينَ",r:"سورة القصص ٧",m:"وحي من الله لأم موسى فيه أمر ثم وعد: أمر بما يبدو مخيفاً، ثم وعد بأن الابن سيعود إليها وسيكون رسولاً. فجمع لها الله الأمان والبشارة في آية واحدة."},
+v2813:{t:"فَرَدَدْنَاهُ إِلَىٰ أُمِّهِ كَيْ تَقَرَّ عَيْنُهَا وَلَا تَحْزَنَ",r:"سورة القصص ١٣",m:"أعاد الله موسى إلى أمه ليطمئن قلبها ولا تحزن. وعد الله لا يتخلف، وإن بدت الطريق إليه طويلة أو صعبة."},
+v2039:{t:"وَأَلْقَيْتُ عَلَيْكَ مَحَبَّةً مِّنِّي وَلِتُصْنَعَ عَلَىٰ عَيْنِي",r:"سورة طه ٣٩",m:"قال الله لموسى: جعلت القلوب تحبك، وربيتك تحت عنايتي ورعايتي. فالله كان يرعاه وهو لا يعلم."},
+v2046:{t:"قَالَ لَا تَخَافَا ۖ إِنَّنِي مَعَكُمَا أَسْمَعُ وَأَرَىٰ",r:"سورة طه ٤٦",m:"قالها الله لموسى وهارون حين خافا من مواجهة فرعون. معيّة فيها سمع ورؤية، فلا شيء يخفى عليه ولا صوت يغيب عنه."},
+v2824:{t:"فَسَقَىٰ لَهُمَا ثُمَّ تَوَلَّىٰ إِلَى الظِّلِّ فَقَالَ رَبِّ إِنِّي لِمَا أَنزَلْتَ إِلَيَّ مِنْ خَيْرٍ فَقِيرٌ",r:"سورة القصص ٢٤",m:"دعاء موسى وهو غريب لا يملك شيئًا. لم يطلب شيئًا بعينه، بل أظهر حاجته وترك اختيار العطاء لربه. وبعدها مباشرة جاءه الفرج."},
+v6611:{t:"وَضَرَبَ اللَّهُ مَثَلًا لِّلَّذِينَ آمَنُوا امْرَأَتَ فِرْعَوْنَ إِذْ قَالَتْ رَبِّ ابْنِ لِي عِندَكَ بَيْتًا فِي الْجَنَّةِ وَنَجِّنِي مِن فِرْعَوْنَ وَعَمَلِهِ وَنَجِّنِي مِنَ الْقَوْمِ الظَّالِمِينَ",r:"سورة التحريم ١١",m:"جعل الله امرأة فرعون مثلاً لكل مؤمن. قالت «عندك بيتًا» فقدّمت الجوار قبل الدار، وطلبت القرب من الله قبل أي شيء، ثم طلبت النجاة."},
+v2169:{t:"قُلْنَا يَا نَارُ كُونِي بَرْدًا وَسَلَامًا عَلَىٰ إِبْرَاهِيمَ",r:"سورة الأنبياء ٦٩",m:"أمر من الله للنار فأطاعت. فكل شيء في الكون تحت أمره، وما يظنه الناس سببًا للهلاك يمكن أن يتحول بكلمة منه إلى برد وسلام."},
+v653:{t:"وَيَرْزُقْهُ مِنْ حَيْثُ لَا يَحْتَسِبُ ۚ وَمَن يَتَوَكَّلْ عَلَى اللَّهِ فَهُوَ حَسْبُهُ ۚ إِنَّ اللَّهَ بَالِغُ أَمْرِهِ ۚ قَدْ جَعَلَ اللَّهُ لِكُلِّ شَيْءٍ قَدْرًا",r:"سورة الطلاق ٣",m:"رزق يأتي من حيث لا تتوقع. ومن اعتمد على الله فهو كافيه. وأمر الله نافذ، ولكل شيء عنده مقدار وموعد لا يتقدم ولا يتأخر."},
+v1924:{t:"فَنَادَاهَا مِن تَحْتِهَا أَلَّا تَحْزَنِي قَدْ جَعَلَ رَبُّكِ تَحْتَكِ سَرِيًّا",r:"سورة مريم ٢٤",m:"في ذروة وجع مريم وخوفها جاءها نداء يطمئنها: لا تحزني، فقد جعل ربك تحتك جدول ماء. جاء الله لها بالسند والماء معًا."},
+v1925:{t:"وَهُزِّي إِلَيْكِ بِجِذْعِ النَّخْلَةِ تُسَاقِطْ عَلَيْكِ رُطَبًا جَنِيًّا",r:"سورة مريم ٢٥",m:"رزق قريب وطيّب جاء لمريم وهي في أضعف حالاتها. كأن الله يقول: أنا أعلم تعبك، وهذا غذاؤك ورزقك."},
+v337:{t:"فَتَقَبَّلَهَا رَبُّهَا بِقَبُولٍ حَسَنٍ وَأَنبَتَهَا نَبَاتًا حَسَنًا",r:"سورة آل عمران ٣٧",m:"تقبل الله مريم تقبلاً حسناً ورعاها كما تُرعى النبتة الطيبة حتى كبرت. وهذا لطف من الله بعبد يبدأ طريقه إليه."},
+v2152:{t:"فَاذْكُرُونِي أَذْكُرْكُمْ وَاشْكُرُوا لِي وَلَا تَكْفُرُونِ",r:"سورة البقرة ١٥٢",m:"وعد عظيم: إذا ذكرتِ الله ذكرك في الملأ الأعلى وفي قلب خلقه. وهو وعد من الله لا يعدله شيء."}
+};
+
+/* ===== أحاديث مع شرح ===== */
+var H=[
+{id:"h1",t:"عَجَبًا لِأَمْرِ الْمُؤْمِنِ، إِنَّ أَمْرَهُ كُلَّهُ خَيْرٌ، وَلَيْسَ ذَاكَ لِأَحَدٍ إِلَّا لِلْمُؤْمِنِ: إِنْ أَصَابَتْهُ سَرَّاءُ شَكَرَ فَكَانَ خَيْرًا لَهُ، وَإِنْ أَصَابَتْهُ ضَرَّاءُ صَبَرَ فَكَانَ خَيْرًا لَهُ",s:"رواه مسلم",m:"النبي ﷺ يتعجب من حال المؤمن، لأن أمره كله خير: إن جاءته نعمة شكر فكانت خيرًا له، وإن جاءه ضيق صبر فكان خيرًا له أيضًا. القلب المتعلق بالله رابح في كل حال، وكل ما يمر به يتحول إلى خير."},
+{id:"h2",t:"مَا يُصِيبُ الْمُسْلِمَ مِنْ نَصَبٍ وَلَا وَصَبٍ وَلَا هَمٍّ وَلَا حُزْنٍ وَلَا أَذًى وَلَا غَمٍّ، حَتَّى الشَّوْكَةِ يُشَاكُهَا، إِلَّا كَفَّرَ اللَّهُ بِهَا مِنْ خَطَايَاهُ",s:"متفق عليه",m:"لا يصيب المسلم تعب ولا مرض ولا هم ولا حزن، ولا حتى وخزة شوكة، إلا كفّر الله به من خطاياه. فكل وجع في القلب أو في الجسد له أثر عند الله، ولا يضيع منه شيء."},
+{id:"h3",t:"لَلَّهُ أَرْحَمُ بِعِبَادِهِ مِنْ هَذِهِ بِوَلَدِهَا",s:"متفق عليه",m:"رأى النبي ﷺ امرأة تبحث عن ولدها، فلما وجدته ضمّته إلى صدرها بحنان. فقال: «أترون هذه طارحة ولدها في النار؟» قالوا: لا والله. فقال: «لَلَّهُ أرحم بعباده من هذه بولدها». رحمة الله بعباده أعظم من أي حنان نعرفه."},
+{id:"h4",t:"لَمَّا قَضَى اللَّهُ الْخَلْقَ كَتَبَ فِي كِتَابِهِ، فَهُوَ عِنْدَهُ فَوْقَ الْعَرْشِ: إِنَّ رَحْمَتِي تَغْلِبُ غَضَبِي",s:"رواه البخاري",m:"قبل أن يخلق الله الخلق كتب في كتابه عنده فوق العرش: إن رحمتي تغلب غضبي. فالرحمة هي الأصل في تعامل الله مع عباده، وبابها مفتوح دائمًا."},
+{id:"h5",t:"يَقُولُ اللَّهُ تَعَالَى: أَنَا عِنْدَ ظَنِّ عَبْدِي بِي، وَأَنَا مَعَهُ إِذَا ذَكَرَنِي",s:"متفق عليه",m:"يقول الله: أنا عند ظن عبدي بي. فالله يعامل عبده على حسب ظنه به، ومن أحسن الظن بالله وجد خيره. وإذا ذكره العبد ذكره الله، وكان معه."},
+{id:"h6",t:"الدُّعَاءُ هُوَ الْعِبَادَةُ",s:"رواه الترمذي وقال: حسن صحيح",m:"الدعاء روح العبادة، لأنه اعتراف بالحاجة إلى الله وإيمان بقدرته. وكل دعوة يرفعها القلب بصدق عبادة عظيمة، والله يسمعها."},
+{id:"h7",t:"مَا مِنْ مُسْلِمٍ يَدْعُو بِدَعْوَةٍ لَيْسَ فِيهَا إِثْمٌ وَلَا قَطِيعَةُ رَحِمٍ، إِلَّا أَعْطَاهُ اللَّهُ بِهَا إِحْدَى ثَلَاثٍ: إِمَّا أَنْ تُعَجَّلَ لَهُ دَعْوَتُهُ، وَإِمَّا أَنْ يَدَّخِرَهَا لَهُ فِي الْآخِرَةِ، وَإِمَّا أَنْ يَصْرِفَ عَنْهُ مِنَ السُّوءِ مِثْلَهَا",s:"رواه أحمد",m:"لا يضيع دعاء صادق عند الله، فإما أن يُستجاب في وقته، وإما يُدَّخر ثوابه للعبد في الآخرة، وإما يُصرف عنه من الشر مثله. فكل دعوة لها أثر."},
+{id:"h8",t:"احْفَظِ اللَّهَ يَحْفَظْكَ، احْفَظِ اللَّهَ تَجِدْهُ تُجَاهَكَ",s:"رواه الترمذي وقال: حسن صحيح",m:"من حفظ حدود الله وراعى علاقته به حفظه الله في دينه ودنياه. وقوله «تجده تجاهك» أي تجد عونه وحفظه أمامك في كل موقف، كأن الله يسير معك خطوة بخطوة."},
+{id:"h9",t:"لَلَّهُ أَشَدُّ فَرَحًا بِتَوْبَةِ عَبْدِهِ حِينَ يَتُوبُ إِلَيْهِ، مِنْ أَحَدِكُمْ كَانَ عَلَى رَاحِلَتِهِ بِأَرْضِ فَلَاةٍ، فَانْفَلَتَتْ مِنْهُ وَعَلَيْهَا طَعَامُهُ وَشَرَابُهُ، فَأَيِسَ مِنْهَا، فَأَتَى شَجَرَةً فَاضْطَجَعَ فِي ظِلِّهَا، فَبَيْنَمَا هُوَ كَذَلِكَ إِذَا هُوَ بِهَا قَائِمَةً عِنْدَهُ، فَأَخَذَ بِخِطَامِهَا، ثُمَّ قَالَ مِنْ شِدَّةِ الْفَرَحِ: اللَّهُمَّ أَنْتَ عَبْدِي وَأَنَا رَبُّكَ، أَخْطَأَ مِنْ شِدَّةِ الْفَرَحِ",s:"رواه مسلم",m:"صوّر النبي ﷺ رجلًا ضاعت منه راحلته وفيها طعامه وشرابه، ويئس منها، ثم وجدها واقفة بجواره، فكانت فرحته لا توصف. وهكذا يفرح الله بعودة عبده إليه؛ مهما ابتعد القلب، فباب العودة مفتوح، والله يفرح بك حين تعود."},
+{id:"h10",t:"إِنَّ اللَّهَ لَا يَنْظُرُ إِلَى صُوَرِكُمْ وَأَمْوَالِكُمْ، وَلَكِنْ يَنْظُرُ إِلَى قُلُوبِكُمْ وَأَعْمَالِكُمْ",s:"رواه مسلم",m:"مقام الإنسان عند الله لا يُقاس بشكله ولا بماله ولا بمنظره أمام الناس، بل بقلبه ونيته وعمله. وهذا ميزان يريح كل قلب أتعبته المقارنات، فقيمتك عند الله بصدق قلبك."},
+{id:"h11",t:"مَنْ قَالَ سُبْحَانَ اللَّهِ وَبِحَمْدِهِ فِي يَوْمٍ مِائَةَ مَرَّةٍ حُطَّتْ خَطَايَاهُ وَإِنْ كَانَتْ مِثْلَ زَبَدِ الْبَحْرِ",s:"متفق عليه",m:"كلمة خفيفة على اللسان، من قالها مائة مرة في اليوم حُطّت عنه خطاياه ولو كانت مثل زبد البحر. فما أكرم الله في الأجر على القليل!"},
+{id:"h12",t:"كَلِمَتَانِ خَفِيفَتَانِ عَلَى اللِّسَانِ، ثَقِيلَتَانِ فِي الْمِيزَانِ، حَبِيبَتَانِ إِلَى الرَّحْمَنِ: سُبْحَانَ اللَّهِ وَبِحَمْدِهِ، سُبْحَانَ اللَّهِ الْعَظِيمِ",s:"متفق عليه",m:"كلمتان خفيفتان على اللسان، ثقيلتان في الميزان، حبيبتان إلى الرحمن. فأصغر الأعمال قد تكون أثقلها عند الله، وأحبها إليه."},
+{id:"h13",t:"كَمُلَ مِنَ الرِّجَالِ كَثِيرٌ، وَلَمْ يَكْمُلْ مِنَ النِّسَاءِ إِلَّا مَرْيَمُ بِنْتُ عِمْرَانَ وَآسِيَةُ امْرَأَةُ فِرْعَوْنَ",s:"رواه البخاري (وهو جزء من حديث)",m:"شهد النبي ﷺ لمريم بنت عمران وآسية امرأة فرعون بالكمال في الإيمان. إحداهما صبرت على كلام الناس وظنونهم، والأخرى ثبتت على الإيمان في قصر الطغيان، وكلتاهما وجدتا ربهما أقرب من كل ما حولهما."},
+{id:"h14",t:"هَذِهِ خَدِيجَةُ قَدْ أَتَتْكَ، فَاقْرَأْ عَلَيْهَا السَّلَامَ مِنْ رَبِّهَا وَمِنِّي، وَبَشِّرْهَا بِبَيْتٍ فِي الْجَنَّةِ مِنْ قَصَبٍ لَا صَخَبَ فِيهِ وَلَا نَصَبَ",s:"رواه البخاري (قاله جبريل للنبي ﷺ)",m:"قال جبريل للنبي ﷺ عن خديجة رضي الله عنها: «اقرأ عليها السلام من ربها ومني، وبشّرها ببيت في الجنة من قصب لا صخب فيه ولا نصب». بيت لا ضجيج فيه ولا تعب، وتكريم خاص لامرأة ثبّتت قلب النبي في أصعب لحظة."}
+];
+
+/* ===== أسماء الله ===== */
+var N=[
+{n:"الجبّار",m:"من أسمائه «الجبّار»، وهو الذي يجبر القلب المكسور، ويجبر الكسر في الجسد والحال والنفس. لن ينكسر قلبك بعيدًا عنه، فهو أقرب من يجبر ما انكسر، ويعيد إليكِ الأمل بعد كل وجع، ويعوّضكِ عما فات بما هو أحسن."},
+{n:"اللطيف",m:"«اللطيف» هو الخبير بدقائق الأمور، والذي يوصل الرفق والخير لعباده بطرق خفية لا تخطر على البال. كم من باب انفتح لكِ من حيث لم تحتسبي، وكم من ضيق انفرج بلطف لم تنتبهي له. ألطافه تصلكِ وأنتِ لا تشعرين، فاطمئني."},
+{n:"الودود",m:"«الودود» هو المحب لعباده، ومعناه أيضًا أنه محبوب من أوليائه. حبه للمؤمنين لا يبعدهم عنه، بل يقرّبهم إليه ويفتح لهم الباب كلما اقتربوا. فلا تشعري أبدًا أنكِ وحدك، فالله يحبكِ ويريدكِ قريبة منه."},
+{n:"الرحيم",m:"«الرحيم» صاحب الرحمة التي وسعت كل شيء، وكل لحظة تعيشينها في كنفها، من نَفَس تتنفسينه إلى أمان تنامين فيه. ورحمته لا تنقطع، فهي تسبق الضيق وتبقى بعده، وتحفظكِ حين لا يحفظكِ أحد."},
+{n:"الشافي",m:"«الشافي» هو الذي بيده الشفاء، يشفي الجسد والقلب معًا. وقد علّمنا النبي ﷺ أن ندعو: «اشفِ أنتَ الشافي، لا شفاء إلا شفاؤك، شفاءً لا يغادر سقمًا». فكل تعب يمر بكِ يعلمه الله، وهو قادر أن يرفعه ويعوّض عنه بالراحة."},
+{n:"الوكيل",m:"«الوكيل» هو الذي يُفوَّض إليه الأمر فيكفي ويتولى. وهذه الكلمة قالها إبراهيم عليه السلام حين أُلقي في النار: «حسبنا الله ونعم الوكيل»، فكانت النار بردًا وسلامًا. من فوّض أمره إلى الله كفاه، ولا يضيع من تركت أمره في يده."},
+{n:"الصمد",m:"«الصمد» هو السيد الذي تتجه إليه القلوب والحاجات، ولا يحتاج هو إلى أحد. فكل حاجة مهما صغرت يمكن أن تعرضيها عليه، فهو الغني عن كل شيء، والذي يقصده الجميع ولا يخيب من قصده."},
+{n:"القريب",m:"«القريب» قريب بعلمه وسمعه وإجابته، يسمع الهمس والدعاء الخفي، ولا يغيب عنه أحد. وكما ذكر في القرآن أنه قريب يجيب الدعاء، فلا تحتاجي لصوت عالٍ ولا لوسيط، فهو أقرب إليكِ من حبل الوريد."},
+{n:"السميع",m:"«السميع» يسمع كل صوت، ويسمع أيضًا ما يدور في القلب قبل أن يخرج في كلمة. فلا حاجة لأن ترفعي صوتكِ، فهو يسمعكِ وأنتِ تفكرين، ويعلم ما وراء الكلمات، ويعلم ما لم تقولي."},
+{n:"الغفور",m:"«الغفور» يستر الذنب ويمحوه، ولا يفضح عبده، ويفتح له باب الرجوع كلما طرقه. وفي القرآن: «لا تقنطوا من رحمة الله». فمهما ابتعد القلب، باب المغفرة مفتوح، والله يفرح بعودة عبده إليه."}
+];
+
+/* ===== أدعية من القرآن ===== */
+var DUAS=[
+{v:"v2183"},{v:"v2187"},{v:"v2824"},{v:"v6611"},
+{own:true,t:"حَسْبُنَا اللَّهُ وَنِعْمَ الْوَكِيلُ",r:"ثبت عن إبراهيم عليه السلام حين أُلقي في النار (رواه البخاري)",m:"كلمة تفويض واطمئنان. أي: الله كافينا، ونعم من يُوكَل إليه الأمر. قالها إبراهيم في أشد لحظة، فكانت النار بردًا وسلامًا."}
+];
+
+// ===== أذكار =====
+var ADK=[
+ {k:"الصباح",items:[{t:"أَصْبَحْنَا وَأَصْبَحَ الْمُلْكُ لِلَّهِ، وَالْحَمْدُ لِلَّهِ، لَا إِلَٰهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَىٰ كُلِّ شَيْءٍ قَدِيرٌ، رَبِّ أَسْأَلُكَ خَيْرَ مَا فِي هَذَا الْيَوْمِ وَخَيْرَ مَا بَعْدَهُ، وَأَعُوذُ بِكَ مِنْ شَرِّ مَا فِي هَذَا الْيَوْمِ وَشَرِّ مَا بَعْدَهُ، رَبِّ أَعُوذُ بِكَ مِنَ الْكَسَلِ وَسُوءِ الْكِبَرِ، رَبِّ أَعُوذُ بِكَ مِنْ عَذَابٍ فِي النَّارِ وَعَذَابٍ فِي الْقَبْرِ",r:"رواه مسلم",c:"مرة واحدة",m:"بداية يوم جديد بيد الله، والملك له وحده. نبدأ يومنا بالحمد، ونطلب منه خير اليوم، ونحتمي به من كل شر."},{t:"اللَّهُمَّ بِكَ أَصْبَحْنَا، وَبِكَ أَمْسَيْنَا، وَبِكَ نَحْيَا، وَبِكَ نَمُوتُ، وَإِلَيْكَ النُّشُورُ",r:"رواه الترمذي",c:"مرة واحدة",m:"كل صباح حياة جديدة هدية من الله، نعيشها بتوفيقه، ونرجع إليه في النهاية."},{t:"رَضِيتُ بِاللَّهِ رَبًّا، وَبِالْإِسْلَامِ دِينًا، وَبِمُحَمَّدٍ ﷺ نَبِيًّا",r:"رواه أبو داود والترمذي",c:"٣ مرات",m:"رضا القلب بالله ربًّا، وبالإسلام دينًا، وبمحمد نبيًّا. وفي الحديث: من قالها ثلاثًا كان حقًّا على الله أن يرضيه يوم القيامة."},{t:"حَسْبِيَ اللَّهُ لَا إِلَٰهَ إِلَّا هُوَ، عَلَيْهِ تَوَكَّلْتُ، وَهُوَ رَبُّ الْعَرْشِ الْعَظِيمِ",r:"رواه أبو داود",c:"٧ مرات",m:"الله وحده يكفيني، لا معبود بحق إلا هو، وعليه وحده أعتمد. ومن قالها كفاه الله ما أهمّه من أمر دنياه وآخرته."},{t:"بِسْمِ اللَّهِ الَّذِي لَا يَضُرُّ مَعَ اسْمِهِ شَيْءٌ فِي الْأَرْضِ وَلَا فِي السَّمَاءِ، وَهُوَ السَّمِيعُ الْعَلِيمُ",r:"رواه أبو داود والترمذي وابن ماجه",c:"٣ مرات",m:"باسم الله الذي لا يضر مع اسمه شيء؛ اسمه حماية وأمان لكل من لجأ إليه."},{t:"اللَّهُمَّ إِنِّي أَسْأَلُكَ الْعَفْوَ وَالْعَافِيَةَ فِي الدُّنْيَا وَالْآخِرَةِ",r:"رواه ابن ماجه",c:"مرة واحدة",m:"أجمل ما يتمناه القلب لنفسه وأحبابه: عفو يمحو الذنب، وعافية تحفظ الجسد والروح."}]},
+ {k:"المساء",items:[{t:"أَمْسَيْنَا وَأَمْسَى الْمُلْكُ لِلَّهِ، وَالْحَمْدُ لِلَّهِ، لَا إِلَٰهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَىٰ كُلِّ شَيْءٍ قَدِيرٌ، رَبِّ أَسْأَلُكَ خَيْرَ مَا فِي هَذِهِ اللَّيْلَةِ وَخَيْرَ مَا بَعْدَهَا، وَأَعُوذُ بِكَ مِنْ شَرِّ مَا فِي هَذِهِ اللَّيْلَةِ وَشَرِّ مَا بَعْدَهَا، رَبِّ أَعُوذُ بِكَ مِنَ الْكَسَلِ وَسُوءِ الْكِبَرِ، رَبِّ أَعُوذُ بِكَ مِنْ عَذَابٍ فِي النَّارِ وَعَذَابٍ فِي الْقَبْرِ",r:"رواه مسلم",c:"مرة واحدة",m:"ختام يوم بالحمد، والملك لله. نطلب منه أن يحفظ الليل وما بعده، ونطمئن أن الأمر كله بيده."},{t:"اللَّهُمَّ بِكَ أَمْسَيْنَا، وَبِكَ أَصْبَحْنَا، وَبِكَ نَحْيَا، وَبِكَ نَمُوتُ، وَإِلَيْكَ الْمَصِيرُ",r:"رواه الترمذي",c:"مرة واحدة",m:"نعيش بالله، ونرجع إليه في النهاية. فالقلب يهدأ حين يعرف أن رجوعه إلى من يحبه."},{t:"اللَّهُمَّ إِنِّي أَمْسَيْتُ أُشْهِدُكَ، وَأُشْهِدُ حَمَلَةَ عَرْشِكَ، وَمَلَائِكَتَكَ، وَجَمِيعَ خَلْقِكَ، أَنَّكَ أَنْتَ اللَّهُ لَا إِلَٰهَ إِلَّا أَنْتَ، وَحْدَكَ لَا شَرِيكَ لَكَ، وَأَنَّ مُحَمَّدًا عَبْدُكَ وَرَسُولُكَ",r:"رواه أبو داود",c:"٤ مرات",m:"أشهد الله وملائكته وخلقه على إيمانه بالله وحده، فيكون القلب في شهادة نور وطمأنينة."},{t:"أَعُوذُ بِكَلِمَاتِ اللَّهِ التَّامَّاتِ مِنْ شَرِّ مَا خَلَقَ",r:"رواه مسلم",c:"٣ مرات",m:"ألجأ إلى كلمات الله التامة التي لا يتجاوزها بر ولا فاجر، أحتمي بها من كل شر."},{t:"سُبْحَانَ اللَّهِ وَبِحَمْدِهِ",r:"رواه مسلم",c:"١٠٠ مرة",m:"كلمة خفيفة على اللسان، ثقيلة في الميزان، تمحو الخطايا ولو كثرت."}]},
+ {k:"النوم",items:[{t:"بِاسْمِكَ اللَّهُمَّ أَمُوتُ وَأَحْيَا",r:"رواه البخاري",c:"مرة واحدة",m:"أنام وأستودع روحي عند الله، فمن يحفظ الحياة يحفظ النوم، وأستيقظ على رحمته."},{t:"اللَّهُمَّ أَسْلَمْتُ نَفْسِي إِلَيْكَ، وَفَوَّضْتُ أَمْرِي إِلَيْكَ، وَوَجَّهْتُ وَجْهِي إِلَيْكَ، وَأَلْجَأْتُ ظَهْرِي إِلَيْكَ، رَغْبَةً وَرَهْبَةً إِلَيْكَ، لَا مَلْجَأَ وَلَا مَنْجَى مِنْكَ إِلَّا إِلَيْكَ، آمَنْتُ بِكِتَابِكَ الَّذِي أَنْزَلْتَ، وَنَبِيِّكَ الَّذِي أَرْسَلْتَ",r:"متفق عليه",c:"مرة واحدة",m:"تسليم كامل لله قبل النوم، فالأمر كله في يده، والقلب يرتاح حين يترك حمله عند من يحمله بحق."},{t:"اللَّهُمَّ قِنِي عَذَابَكَ يَوْمَ تَبْعَثُ عِبَادَكَ",r:"رواه أبو داود والترمذي",c:"٣ مرات",m:"دعاء بالوقاية والنجاة في يوم يجمع الله فيه عباده."},{t:"اللَّهُ لَا إِلَٰهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ ۚ لَا تَأْخُذُهُ سِنَةٌ وَلَا نَوْمٌ ۚ لَّهُ مَا فِي السَّمَاوَاتِ وَمَا فِي الْأَرْضِ ۗ مَن ذَا الَّذِي يَشْفَعُ عِندَهُ إِلَّا بِإِذْنِهِ ۚ يَعْلَمُ مَا بَيْنَ أَيْدِيهِمْ وَمَا خَلْفَهُمْ ۖ وَلَا يُحِيطُونَ بِشَيْءٍ مِّنْ عِلْمِهِ إِلَّا بِمَا شَاءَ ۚ وَسِعَ كُرْسِيُّهُ السَّمَاوَاتِ وَالْأَرْضَ ۖ وَلَا يَئُودُهُ حِفْظُهُمَا ۚ وَهُوَ الْعَلِيُّ الْعَظِيمُ",r:"رواه البخاري (من حديث أبي هريرة)",c:"مرة واحدة",m:"آية الكرسي، سيدة آيات القرآن كما جاء في الحديث. فيها عظمة الله وحفظه، فينام القلب في حراسة الحي القيوم."},{t:"قُلْ هُوَ اللَّهُ أَحَدٌ ۝ اللَّهُ الصَّمَدُ ۝ لَمْ يَلِدْ وَلَمْ يُولَدْ ۝ وَلَمْ يَكُن لَّهُ كُفُوًا أَحَدٌ",r:"رواه البخاري",c:"٣ مرات",m:"سورة الإخلاص، تعدل ثلث القرآن كما جاء في الحديث. فيها توحيد الله الذي لا يُشبهه شيء."},{t:"قُلْ أَعُوذُ بِرَبِّ الْفَلَقِ ۝ مِن شَرِّ مَا خَلَقَ ۝ وَمِن شَرِّ غَاسِقٍ إِذَا وَقَبَ ۝ وَمِن شَرِّ النَّفَّاثَاتِ فِي الْعُقَدِ ۝ وَمِن شَرِّ حَاسِدٍ إِذَا حَسَدَ",r:"رواه البخاري",c:"٣ مرات",m:"لجوء إلى رب الفجر والنور، يحفظ من كل ضر ويبعد الظلمة عن القلب."},{t:"قُلْ أَعُوذُ بِرَبِّ النَّاسِ ۝ مَلِكِ النَّاسِ ۝ إِلَٰهِ النَّاسِ ۝ مِن شَرِّ الْوَسْوَاسِ الْخَنَّاسِ ۝ الَّذِي يُوَسْوِسُ فِي صُدُورِ النَّاسِ ۝ مِنَ الْجِنَّةِ وَالنَّاسِ",r:"رواه البخاري",c:"٣ مرات",m:"لجوء إلى رب الناس وملكهم وإلههم، فيسكن القلب ويطمئن من كل وسوسة."},{t:"سُبْحَانَ اللَّهِ",r:"متفق عليه",c:"٣٣ مرة",m:"تنزيه الله عن كل نقص، وذكر يملأ القلب سكينة قبل النوم."},{t:"الْحَمْدُ لِلَّهِ",r:"متفق عليه",c:"٣٣ مرة",m:"شكر على نعم الله التي لا تُعد، فيختم اليوم بالامتنان."},{t:"اللَّهُ أَكْبَرُ",r:"متفق عليه",c:"٣٤ مرة",m:"الله أكبر من كل همّ وكل خوف، فيغمض القلب عينيه مطمئنًا."}]},
+ {k:"دعاء الهم",items:[{t:"اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنَ الْهَمِّ وَالْحَزَنِ، وَالْعَجْزِ وَالْكَسَلِ، وَالْبُخْلِ وَالْجُبْنِ، وَضَلَعِ الدَّيْنِ، وَغَلَبَةِ الرِّجَالِ",r:"رواه البخاري",c:"مرة واحدة",m:"دعاء يلجأ فيه القلب إلى الله من ثقل الهم والحزن، ويطلب القوة والراحة والفرج."},{t:"لَا إِلَٰهَ إِلَّا اللَّهُ الْعَظِيمُ الْحَلِيمُ، لَا إِلَٰهَ إِلَّا اللَّهُ رَبُّ الْعَرْشِ الْعَظِيمِ، لَا إِلَٰهَ إِلَّا اللَّهُ رَبُّ السَّمَاوَاتِ وَرَبُّ الْأَرْضِ وَرَبُّ الْعَرْشِ الْكَرِيمِ",r:"متفق عليه",c:"مرة واحدة",m:"عند الكرب يتذكر القلب عظمة الله وحلمه ورحمته، ورب العرش الكريم فيخفّ الضيق."},{t:"اللَّهُمَّ رَحْمَتَكَ أَرْجُو، فَلَا تَكِلْنِي إِلَى نَفْسِي طَرْفَةَ عَيْنٍ، وَأَصْلِحْ لِي شَأْنِي كُلَّهُ، لَا إِلَٰهَ إِلَّا أَنْتَ",r:"رواه أبو داود",c:"مرة واحدة",m:"رحمة الله هي الرجاء، فلا يتركنا لأنفسنا ولا لحظة، ويصلح الحال كله."}]}
+];
+
+/* ===== القصص: نص عادي = فقرة، {v:مفتاح آية}، {h:نص حديث، s:مصدر} ===== */
+var S=[
+{id:"yusuf",title:"يوسف.. وربي لطيف لما يشاء",sub:"قصة اللطف الخفي",min:6,body:[
+"بدأت الحكاية بحلم صغير. رأى يوسف عليه السلام وهو طفل أحد عشر كوكبًا والشمس والقمر ساجدين له، فحكى الحلم لأبيه يعقوب. عرف الأب أن لابنه شأنًا عظيمًا، وخاف عليه من حسد إخوته، فطلب منه ألا يحكي لهم.",
+"ومع ذلك دخلت الغيرة قلوب الإخوة. أخذوه في نزهة وألقوه في قاع بئر، ثم رجعوا إلى أبيهم بقميص عليه دم كاذب. وفي الظلام والوحدة في قاع البئر، أوحى الله إلى يوسف أنه سيخبرهم بما فعلوا يومًا وهم لا يشعرون.",
+"مرت قافلة، ونزل أحدهم دلوه ليستسقي فخرج يوسف. ثم بيع في مصر بثمن قليل، واشتراه رجل من كبار القوم وقال لامرأته: أكرمي مثواه. هكذا مكّن الله ليوسف في الأرض، من حيث لا يخطر على بال.",
+"ثم جاءت الفتنة في بيت العزيز، فاستعصم يوسف وقال: معاذ الله، وفضّل السجن على المعصية. فدخل السجن سنين وهو بريء. لكن السجن لم يكن آخر الحكاية، ففيه التقى بفتيين وفسّر لهما رؤياهما، وكانت تلك أول خيوط الفرج.",
+"وبعد سنوات رأى الملك رؤيا حيّرت من حوله، فتذكّر الساقي يوسف. جاء يوسف بتأويل أنقذ مصر من المجاعة، فقال الملك: ائتوني به، ثم جعله على خزائن الأرض.",
+"وجاءت سنوات الجدب، وجاء إخوته يطلبون الطعام فعرفهم وهم له منكرون. وكان أبوه يعقوب قد ابيضت عيناه من الحزن، ومع ذلك لم ينقطع أمله. قال وهو يحمل ألمًا كبيرًا:",
+{v:"v1286"},
+"وقال لأبنائه:",
+{v:"v1287"},
+"ثم أُلقي قميص يوسف على وجه أبيه فارتدّ بصيرًا، واجتمع الشمل في مصر. ورفع يوسف أبويه على العرش، وقال: هذا تأويل رؤياي من قبل قد جعلها ربي حقًّا. ثم قال الكلمة التي تلخّص الرحلة كلها:",
+{v:"v12100"},
+"رحلة من البئر إلى العرش. وكل خطوة مؤلمة فيها كانت خطوة في طريق رسمه الله بلطف. لم يظهر هذا اللطف وقت الألم، لكنه كان يعمل في الخفاء طوال الوقت."
+],end:"لطف الله قد لا يُرى في وقت الألم، لكنه يعمل في الخفاء."},
+
+{id:"yunus",title:"يونس.. ونادى في الظلمات",sub:"قصة من نادى فسمعه ربه",min:5,body:[
+"أرسل الله يونس عليه السلام إلى قومه في نينوى، فدعاهم زمنًا طويلًا. ولما طال الأمر خرج مغاضبًا من قومه قبل أن يأذن له ربه، وركب سفينة مشحونة بالركاب.",
+"هاجت الأمواج واضطرب البحر، فاقترع الركاب فيما بينهم، فكان يونس هو من أصابته القرعة، فأُلقي في الماء فالتقمه الحوت.",
+"وهناك، في ظلمة الليل وظلمة البحر وظلمة بطن الحوت، لم يجد يونس بابًا إلا باب ربه. وقد ذكر المفسرون أن هذه هي الظلمات الثلاث. فنادى بأصدق ما يكون:",
+{v:"v2187"},
+"فاستجاب الله له ونجّاه من الغم، وجعل هذه النجاة وعدًا لكل مؤمن يدعو بدعوته.",
+"ثم ألقاه الحوت على الشاطئ وهو ضعيف مريض، فأنبت الله عليه شجرة من يقطين تظلّله وتطعمه. ثم أرسله ربه إلى مئة ألف أو يزيدون، فآمنوا جميعًا، فمتّعهم الله إلى حين.",
+"الظلمة التي ظنها يونس نهاية، كانت المكان الذي سمعه فيه ربه. ومنها خرج إلى ظل شجرة ورحمة وقوم آمنوا."
+],end:"من قلب الظلمة وصل نداؤه، ومن هناك خرج إلى الرحمة."},
+
+{id:"ayyub",title:"أيوب.. نعم العبد",sub:"قصة الصبر الجميل",min:4,body:[
+"أيوب عليه السلام نبي ابتلاه الله ببلاء شديد في جسده، وطال عليه الأمر حتى صار مثلًا يُضرب في الصبر. ومع كل ما مر به، لم ينصرف قلبه عن ربه.",
+"وحين اشتدت الحال، لم يُكثر الشكوى للناس، بل رفع يديه بكلمات قليلة فيها أدب كبير:",
+{v:"v2183"},
+"لاحظي كيف دعا: لم يقل «اشفني» صراحة، بل عرض حاله وأثنى على ربه بأنه أرحم الراحمين، وترك الأمر له. فجاء الجواب سريعًا: أمره الله أن يضرب الأرض برجله، فنبعت عين ماء بارد يغتسل منه ويشرب. فشفاه الله، ورد عليه أهله ومثلهم معهم، رحمة من عنده وذكرى للعابدين.",
+"ثم شهد الله له بكلمات لا تُنسى:",
+{v:"v3844"},
+"لم يُرفع البلاء لأن أيوب صرخ أكثر، بل لأن الله رحيم، والدعاء كان بابًا رقيقًا بين عبد وربه."
+],end:"من صبر ولجأ إلى ربه وجد عنده أكثر مما فقد."},
+
+{id:"musa-umm",title:"أم موسى.. وردّه إلى حضنها",sub:"قصة اليقين في وعد الله",min:5,body:[
+"في زمن كان فرعون يذبّح فيه مواليد بني إسرائيل، وُلد موسى. خافت أمه خوفًا لا يعرفه إلا الأمهات، فجاءها وحي من ربها:",
+{v:"v287"},
+"فوضعته في صندوق وألقته في النهر وفي قلبها ما فيه. وساق الماء الصندوق إلى قصر فرعون، فالتقطه آل فرعون، وكانت امرأة فرعون تقول عنه إنه قرة عين لها ولزوجها.",
+"وعن عناية الله بموسى يقول سبحانه إنه ألقى عليه محبة منه حتى تحبه القلوب:",
+{v:"v2039"},
+"وكان قلب أم موسى فارغًا من كل شيء إلا موسى، لكن الله ربط على قلبها. فأرسلت أخته تتبع أثره، ورفض الطفل كل المراضع، فدلّتهم أخته على أمٍّ ترضعه. فعاد الطفل إلى حضن أمه التي ألقته في النهر.",
+{v:"v2813"},
+"لم يطلب الله من الأم أن تفهم الخطة كلها، بل أن تثق. ثم جاء الوعد حقًّا، وعاد الطفل إلى حضنها، وصار نبيًّا."
+],end:"من أطاع وهو خائف، أمّنه الله وردّ إليه ما أحبّ."},
+
+{id:"musa-madyan",title:"موسى في مدين.. ربّ إني لما أنزلت إليّ من خير فقير",sub:"قصة الدعاء الذي فتح باب الفرج",min:4,body:[
+"هرب موسى من مصر خائفًا، ووصل إلى مدين وحيدًا، لا مال معه ولا أهل ولا يعرف أحدًا. وعند الماء وجد قومًا يسقون مواشيهم، ووجد امرأتين تمنعان غنمهما وتنتظران.",
+"سألهما عن شأنهما، فقالتا: أبونا شيخ كبير، ولا نسقي حتى ينصرف الرعاة. فسقى لهما، ثم ابتعد إلى ظل شجرة وهو متعب جائع غريب، ورفع يديه:",
+{v:"v2824"},
+"ولم يقل: أعطني كذا. قال إني فقير إلى ما تنزل إليّ من خير، فترك اختيار العطاء للكريم. وما لبث أن جاءته إحدى المرأتين تمشي على استحياء، تقول إن أبي يدعوك ليجزيك أجر ما سقيت لنا.",
+"وهناك وجد موسى بيتًا وأمانًا وعملًا وأهلًا بعد أن كان لا يملك شيئًا. فمن دعاء قصير تحت ظل شجرة بدأ فصل جديد في حياته.",
+"الطريق الذي بدأ بالخوف انتهى بالأمان، والدعاء الصغير تحت الظل فتح بابًا كبيرًا."
+],end:"الدعاء الصادق، ولو كان كلمة واحدة، يطرق باب الكريم."},
+
+{id:"maryam",title:"مريم.. وربكِ تحتكِ سريًّا",sub:"قصة الدعم الذي يأتي في أضعف اللحظات",min:5,body:[
+"نشأت مريم في بيت عبادة، وكان الله قد رعاها منذ صغرها:",
+{v:"v337"},
+"وكفلها زكريا عليه السلام، فكان كلما دخل عليها المحراب وجد عندها رزقًا. فسألها: أنّى لكِ هذا؟ قالت: هو من عند الله، إن الله يرزق من يشاء بغير حساب.",
+"ثم جاءها أمر عظيم، فقد بشّرتها الملائكة بغلام بلا أب. فخافت وانتبذت مكانًا بعيدًا، وجاءها المخاض إلى جذع نخلة، فقالت من شدة التعب والخوف: يا ليتني مت قبل هذا وكنت نسيًا منسيًا.",
+"وفي أشد لحظات الوجع والخوف، سمعت صوتًا من تحتها:",
+{v:"v1924"},
+"ثم دلّها على الرزق وهي في تعب الولادة:",
+{v:"v1925"},
+"وأخبرها أن تأكل وتشرب وتقرّ عينًا، وإن رأت أحدًا فتقول إنها نذرت للرحمن صومًا فلن تكلم اليوم إنسيًّا. فلما جاءت قومها تحمله، قالوا لها ما قالوا، فأشارت إلى الطفل، فنطق وهو في المهد ودافع الله عنها بكلام لم يجرّبه بشر.",
+"لم تدافع مريم عن نفسها بكلمة، لأن ربها تكفّل بالدفاع. وجاء الرزق في الوجع، وجاء السند من تحت قدميها."
+],end:"من تحت أضعف لحظاتنا يخرج الله لنا ماءً وسنداً."},
+
+{id:"asiya",title:"امرأة فرعون.. ربّ ابنِ لي عندك بيتًا",sub:"قصة القلب الذي سبق إلى الله",min:4,body:[
+"امرأة فرعون كانت في أكبر قصر في الدنيا، وكانت زوجة أقوى حاكم في زمانها. ومع ذلك آمنت بالله وحدها في بيت كله كفر، ولم يكن حولها من يشجعها أو يشبهها.",
+"ولم تطلب منصبًا ولا أمانًا من الدنيا، بل رفعت يديها بدعاء سجّله القرآن مثلًا لكل مؤمن:",
+{v:"v6611"},
+"قالت «عندك بيتًا» قبل أن تقول «نجّني». وقد لاحظ المفسرون أنها قدّمت الجوار قبل الدار، أي طلبت القرب من الله قبل أن تطلب النجاة. فكأن قلبها كان قد انتقل إلى جواره وهي بعد في القصر.",
+"وشهد لها النبي ﷺ في الحديث الصحيح:",
+{h:"كَمُلَ مِنَ الرِّجَالِ كَثِيرٌ، وَلَمْ يَكْمُلْ مِنَ النِّسَاءِ إِلَّا مَرْيَمُ بِنْتُ عِمْرَانَ وَآسِيَةُ امْرَأَةُ فِرْعَوْنَ",s:"رواه البخاري"},
+"كان قصرها أكبر قصر في الأرض، لكن قلبها طلب بيتًا عند الله. ومن طلب ما عند الله أعطاه."
+],end:"من سبق بقلبه إلى الله، لم يضره ما حوله."},
+
+{id:"ibrahim",title:"إبراهيم.. يا نار كوني بردًا وسلامًا",sub:"قصة التوكل حين تنقطع الأسباب",min:4,body:[
+"حطّم إبراهيم عليه السلام الأصنام وترك كبيرها. فلما سألوه قال: بل فعله كبيرهم هذا فاسألوهم إن كانوا ينطقون. فرجعوا إلى أنفسهم لحظة وقالوا: إنكم أنتم الظالمون، ثم غضبوا وقرروا أن يحرقوه.",
+"جمعوا حطبًا كثيرًا وأوقدوا نارًا عظيمة، وألقوه فيها. وثبت في صحيح البخاري عن ابن عباس أن إبراهيم قال في تلك اللحظة:",
+{h:"حَسْبُنَا اللَّهُ وَنِعْمَ الْوَكِيلُ",s:"رواه البخاري عن ابن عباس"},
+"فجاء الأمر من السماء، ولم يكن لأحد في الأرض ما يمنع:",
+{v:"v2169"},
+"وأراد القوم به كيدًا، فجعلهم الله الأخسرين.",
+"حين لم يبقَ سبب في الأرض، تحرّك الأمر من السماء. والنار التي أرادوها نهاية صارت برداً وسلامًا."
+],end:"حين تنقطع كل الأسباب، يبقى الله وحده، وهو يكفي."},
+
+{id:"hajar",title:"هاجر.. إذن لا يضيّعنا",sub:"قصة اليقين قبل رؤية الجواب",min:6,body:[
+"جاء إبراهيم عليه السلام بهاجر وابنها الرضيع إسماعيل إلى مكة، حيث لا زرع ولا ماء ولا أنيس. وضعهما عند شجرة، وترك عندهما جرابًا فيه تمر وسقاءً فيه ماء، ثم انصرف راجعًا. (رواه البخاري)",
+"تبعته هاجر وقالت: يا إبراهيم، أين تذهب وتتركنا بهذا الوادي الذي ليس فيه إنس ولا شيء؟ وكرّرت ذلك مرارًا وهو لا يلتفت. ثم قالت:",
+{h:"آللَّهُ الَّذِي أَمَرَكَ بِهَذَا؟ قَالَ: نَعَمْ. قَالَتْ: إِذَنْ لَا يُضَيِّعُنَا",s:"رواه البخاري"},
+"ثم رجعت. ومضى إبراهيم حتى إذا غاب عنهما استقبل البيت ودعا ربه، ورفع يديه أن يجعل أفئدة من الناس تهوي إليهم ويرزقهم من الثمرات.",
+"ونفد الماء، وجاع الصغير، وجعل يتلوّى. فلم تحتمل أمه أن تنظر إليه، فصعدت الصفا تنظر هل ترى أحدًا، فلم ترَ. ثم نزلت وسعت في الوادي حتى صعدت المروة، ففعلت ذلك سبع مرات. وقد قال النبي ﷺ: فذلك سعي الناس بينهما.",
+"فلما كانت على المروة سمعت صوتًا، فتسمّعت، وقالت: قد أسمعتَ إن كان عندك غوث. فإذا هي بالملك عند موضع زمزم، فبحث بعقبه حتى ظهر الماء. فجعلت تحوّضه وتغرف من الماء في سقائها وهو يفور بعد ما تغرف. وقال النبي ﷺ: يرحم الله أم إسماعيل، لو تركت زمزم لكانت عينًا معينًا.",
+"فشربت وأرضعت ولدها، وقال لها الملك: لا تخافوا الضيعة، فإن هاهنا بيت الله يبنيه هذا الغلام وأبوه، وإن الله لا يضيع أهله.",
+"قالت: «إذن لا يضيّعنا» قبل أن ترى الماء. فكان يقينها قبل أن ترى. وكان جواب الله أكبر من سؤالها: بئر لا ينقطع، وبيت يقصده الناس إلى اليوم، وسعي يتكرر في كل حج وعمرة."
+],end:"قالت إذن لا يضيّعنا، ثم رأت أن الله لا يضيّع."},
+
+{id:"khadija",title:"خديجة.. كلا والله ما يخزيك الله أبدًا",sub:"قصة الكلمة التي ثبّتت قلبًا",min:5,body:[
+"في غار حراء نزل الوحي لأول مرة على النبي ﷺ، فرجع إلى بيته يرجف فؤاده، وقال لخديجة رضي الله عنها: زمّلوني زمّلوني. فزمّلوه حتى ذهب عنه الروع. ثم حكى لها الخبر وقال: لقد خشيت على نفسي.",
+"فقالت له كلمات صارت من أجمل ما قيل في طمأنة قلب:",
+{h:"كَلَّا وَاللَّهِ مَا يُخْزِيكَ اللَّهُ أَبَدًا، إِنَّكَ لَتَصِلُ الرَّحِمَ، وَتَحْمِلُ الْكَلَّ، وَتَكْسِبُ الْمَعْدُومَ، وَتَقْرِي الضَّيْفَ، وَتُعِينُ عَلَى نَوَائِبِ الْحَقِّ",s:"رواه البخاري"},
+"لم تكتفِ بالكلام، فذهبت به إلى ابن عمها ورقة بن نوفل، وكان قد عرف الكتب السابقة، فطمأنه وأخبره أن هذا هو الناموس الذي نزل على موسى.",
+"ومرّت السنين، ورحلت خديجة عن الدنيا، وبقي أثرها في قلب النبي ﷺ حتى آخر عمره. وروى البخاري أن جبريل جاء النبي ﷺ فقال:",
+{h:"هَذِهِ خَدِيجَةُ قَدْ أَتَتْكَ، فَاقْرَأْ عَلَيْهَا السَّلَامَ مِنْ رَبِّهَا وَمِنِّي، وَبَشِّرْهَا بِبَيْتٍ فِي الْجَنَّةِ مِنْ قَصَبٍ لَا صَخَبَ فِيهِ وَلَا نَصَبَ",s:"رواه البخاري"},
+"امرأة واحدة، بحكمتها وحنانها، ثبّتت قلبًا في أصعب لحظة، فجاءها السلام من ربها نفسه."
+],end:"الكلمة الطيبة في وقتها قد تكون سندًا لنبي."}
+];
+
+(function(){
+  var $=function(s){return document.querySelector(s)};
+  var $$=function(s){return Array.prototype.slice.call(document.querySelectorAll(s))};
+  var root=document.documentElement; root.lang="ar";
+  function store(k,v){try{if(v===undefined)return localStorage.getItem(k);localStorage.setItem(k,v)}catch(e){return null}}
+  function el(tag,cls,txt){var e=document.createElement(tag);if(cls)e.className=cls;if(txt!==undefined)e.textContent=txt;return e}
+  function ar(n){return Number(n).toLocaleString("ar-EG")}
+  function norm(s){return s.replace(/[ً-ٰٟ]/g,"").replace(/[أإآ]/g,"ا").replace(/ة/g,"ه").replace(/ى/g,"ي")}
+  var reduce=window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var PARTIAL={v2286:1,v3953:1,v1287:1,v2186:1,v337:1,v2813:1,v1964:1,v2039:1,v3844:1};
+
+  /* palettes */
+  function setPalette(p){
+    if(p==="cream")root.removeAttribute("data-palette");else root.setAttribute("data-palette",p);
+    $$(".dot").forEach(function(d){d.setAttribute("aria-pressed",String(d.dataset.p===p))});
+    store("ht-palette",p); if(giftReady)drawCard();
+  }
+  $$(".dot").forEach(function(d){d.addEventListener("click",function(){setPalette(d.dataset.p)})});
+  var giftReady=false;
+
+  /* tabs */
+  var TABS=["hamsa","qesas","ward","hadya","ana"];
+  function showTab(t){
+    $$("[data-tab]").forEach(function(b){b.setAttribute("aria-selected",String(b.dataset.tab===t))});
+    TABS.forEach(function(n){$("#p-"+n).hidden=(n!==t)});
+    if(t==="hadya")drawCard();
+  }
+  $$("[data-tab]").forEach(function(b){b.addEventListener("click",function(){showTab(b.dataset.tab)})});
+  var h=(location.hash||"").replace("#",""); if(TABS.indexOf(h)>-1)showTab(h);
+
+  /* verse box builder */
+  function verseBox(key,withMeaning){
+    var v=V[key],wrap=el("div");
+    var f=el("div","frame");f.innerHTML='<svg class="fl" aria-hidden="true"><use href="#flower"/></svg>';
+    f.appendChild(el("p","verse",v.t));
+    f.appendChild(el("p","ref",v.r+(PARTIAL[key]?" (جزء من الآية)":"")));
+    wrap.appendChild(f);
+    if(withMeaning){
+      var d=el("details","m");d.appendChild(el("summary","","معنى الآية"));d.appendChild(el("p","meaning",v.m));wrap.appendChild(d);
+    }
+    return wrap;
+  }
+  function goStory(id){showTab("qesas");openStory(id);window.scrollTo({top:0,behavior:reduce?"auto":"smooth"})}
+
+  /* hamsa */
+  var HUGS=["أنا هنا... حضناكي أوي... اللي حاسة بيه تقيل، وأنا سامعاه.","تعالي ارتاحي هنا شوية... مفيش حد هيحكم عليكي.","كلامك وصل... وإحساسك مفهوم... خدي وقتك.","الحمد لله إنك جيتي... ومش لازم تبقي كويسة دلوقتي."];
+  var STATES=[
+    {k:"anx",label:"قلقانة 😔",mid:"القلق بيصوّر لكي بكرة أصعب من اللي هيحصل فعلاً. وكل خوف شايلاه، ربنا شايفه وعارفه.",verses:["v1328"],story:"ibrahim",sl:"قصة إبراهيم وتوكله"},
+    {k:"sleep",label:"مش عارفة أنام 🌙",mid:"الليل بيكبّر كل حاجة، وده مش معناه إن همّك أكبر من الصبح. وربنا قريب منك دلوقتي.",verses:["v2152"],story:"yunus",sl:"قصة يونس ونداؤه في الظلمات"},
+    {k:"press",label:"مضغوطة",mid:"إنتي شايلة كتير، ومش مطلوب منك تخلصيه كله النهارده. وأي حد مكانك كان هيتعب.",verses:["v2286"],story:"maryam",sl:"قصة مريم عليها السلام"},
+    {k:"listen",label:"محتاجة حد يسمعني",mid:"اتكلمي زي ما تحبي، والكلام نفسه بيخفف. وربنا سامعك قبل ما تنطقي.",verses:["v2186"],story:"musa-madyan",sl:"قصة موسى ودعاؤه في مدين"},
+    {k:"sad",label:"حزينة",mid:"الحزن مش ضعف ولا قلة إيمان. ده قلب حاسس، وربنا عارف ضيق صدرك.",verses:["v933","v935"],story:"ayyub",sl:"قصة أيوب وصبره"},
+    {k:"hope",label:"يائسة",mid:"سيدنا يونس كان لوحده في ظلمات تلات، ونادى ربنا، فربنا نجّاه. ظلمتك مش آخر الحكاية، وباب ربنا عمره ما اتقفل.",verses:["v3953","v945"],story:"yusuf",sl:"قصة يوسف: من البئر إلى العرش",hot:true}
+  ];
+  var END="حضناكي أوي ... اطمني ... أنا جنبك ... مش هسيبك ... 🕊️";
+  var DANGER=["انتحر","اموت","انهي حياتي","اخلص من حياتي","مش عاوزه اعيش","مش عايزه اعيش","اذي نفسي","اقتل نفسي","نفسي اختفي","تعبت من الحياه","مش قادره اكمل","مش عاوزه اكمل","مش عايزه اكمل","مفيش فايده من حياتي"];
+  var KEYS={anx:["قلق","خايف","خوف","توتر","متوتر"],sleep:["نوم","انام","سهر","ارق","صاحيه"],press:["ضغط","مضغوط","زهق","مخنوق","تعبان","مرهق","ارهاق"],sad:["حزين","زعلان","بعيط","عياط","وحيد","وحده","مكسور","بكي"],hope:["يائس","ياس","مفيش امل","مفيش فايده","فاقده الامل","خلاص"],listen:["اتكلم","حد يسمع","محتاجه حد","فضفض"]};
+  var rot=0;
+  function detect(text){
+    var n=norm(text),d=DANGER.some(function(w){return n.indexOf(norm(w))>-1}),st=null;
+    if(d)st="hope"; else for(var k in KEYS){if(KEYS[k].some(function(w){return n.indexOf(norm(w))>-1})){st=k;break}}
+    return {state:st||"listen",danger:d};
+  }
+  function hotline(){
+    var a=el("div","alert"),p=el("p");
+    p.appendChild(el("b","","لو مش حاسة بالأمان مع نفسك دلوقتي: "));
+    p.appendChild(document.createTextNode("كلمي الخط الساخن للأمانة العامة للصحة النفسية، مجاني ومتاح على مدار الساعة، أو روحي لأقرب طوارئ، وخلي حد معاكي. وجودك مهم."));
+    a.appendChild(p);
+    var r=el("div","row"),num=el("span","num","16328");r.appendChild(num);
+    var cp=el("button","btn ghost","انسخي الرقم");
+    function sel(n){try{var rg=document.createRange();rg.selectNodeContents(n);var s=getSelection();s.removeAllRanges();s.addRange(rg)}catch(e){}}
+    cp.addEventListener("click",function(){try{navigator.clipboard.writeText("16328").then(function(){cp.textContent="اتنسخ"},function(){sel(num)})}catch(e){sel(num)}});
+    r.appendChild(cp);var tel=el("a","btn ghost","اتصلي");tel.href="tel:16328";r.appendChild(tel);a.appendChild(r);
+    return a;
+  }
+  function reply(stateKey,danger){
+    var s=STATES.filter(function(x){return x.k===stateKey})[0];
+    var c=$("#replyCard");c.hidden=false;c.innerHTML="";
+    var box=el("div","reply");
+    box.appendChild(el("p","hug",HUGS[rot++%HUGS.length]));
+    box.appendChild(el("p","",s.mid));
+    s.verses.forEach(function(k){box.appendChild(verseBox(k,true))});
+    var b=el("button","btn ghost",s.sl);b.addEventListener("click",function(){goStory(s.story)});
+    var r=el("div","row");r.appendChild(b);box.appendChild(r);
+    if(danger||s.hot)box.appendChild(hotline());
+    box.appendChild(el("p","end",END));
+    c.appendChild(box);
+    c.scrollIntoView({behavior:reduce?"auto":"smooth",block:"start"});
+  }
+  var pick=null;
+  STATES.forEach(function(s){
+    var b=el("button","chip",s.label);b.setAttribute("aria-pressed","false");
+    b.addEventListener("click",function(){$$("#chips .chip").forEach(function(x){x.setAttribute("aria-pressed","false")});b.setAttribute("aria-pressed","true");pick=s.k;reply(s.k,false)});
+    $("#chips").appendChild(b);
+  });
+  $("#send").addEventListener("click",function(){
+    var t=$("#story").value.trim();
+    if(!t){reply(pick||"listen",false);return}
+    var r=detect(t);reply(r.state,r.danger);
+  });
+
+  /* stories */
+  function openStory(id){
+    var s=S.filter(function(x){return x.id===id})[0];if(!s)return;
+    var r=$("#reader");r.innerHTML="";r.hidden=false;$("#storyList").hidden=true;$("#storiesHead").hidden=true;
+    var back=el("button","btn ghost","← كل الحكايات");back.addEventListener("click",closeStory);
+    var row=el("div","row");row.style.marginTop="0";row.appendChild(back);r.appendChild(row);
+    r.appendChild(el("h2","",s.title));
+    r.appendChild(el("p","hint",s.sub+" · قراءة نحو "+ar(s.min)+" دقائق"));
+    s.body.forEach(function(p){
+      if(typeof p==="string"){r.appendChild(el("p","",p))}
+      else if(p.v){r.appendChild(verseBox(p.v,true))}
+      else if(p.h){var q=el("div","quote",p.h);q.style.fontFamily="var(--f-quran)";q.style.fontSize="21px";q.appendChild(el("small","",p.s));r.appendChild(q)}
+    });
+    r.appendChild(el("div","endbox",s.end));
+    var i=S.indexOf(s),nx=S[(i+1)%S.length];
+    var nb=el("button","btn","الحكاية التالية: "+nx.title.split("..")[0]);nb.addEventListener("click",function(){openStory(nx.id);window.scrollTo({top:0})});
+    var nr=el("div","row");nr.style.justifyContent="center";nr.appendChild(nb);r.appendChild(nr);
+    window.scrollTo({top:0,behavior:reduce?"auto":"smooth"});
+  }
+  function closeStory(){$("#reader").hidden=true;$("#storyList").hidden=false;$("#storiesHead").hidden=false;window.scrollTo({top:0})}
+  S.forEach(function(s){
+    var b=el("button","scard");b.appendChild(el("b","",s.title));b.appendChild(el("small","",s.sub+" · "+ar(s.min)+" دقائق"));
+    b.addEventListener("click",function(){openStory(s.id)});$("#storyList").appendChild(b);
+  });
+
+  /* ward: verse of moment */
+  var KEYS_V=Object.keys(V),fk=null;
+  function setFeatured(k){fk=k;$("#featuredText").textContent=V[k].t;$("#featuredRef").textContent=V[k].r+(PARTIAL[k]?" (جزء من الآية)":"");$("#featuredMeaning").textContent=V[k].m}
+  setFeatured("v1328");
+  var VB=KEYS_V.map(function(k){
+    var b=el("button","mini",V[k].t);
+    b.addEventListener("click",function(){setFeatured(k);$("#featured").scrollIntoView({behavior:reduce?"auto":"smooth",block:"center"})});
+    return b;
+  });
+  var vShown=0;
+  function showVerses(n){for(var k=0;k<n&&vShown<VB.length;k++){$("#verseGrid").appendChild(VB[vShown++])}}
+  showVerses(4);
+  $("#newVerse").addEventListener("click",function(){var n;do{n=KEYS_V[Math.floor(Math.random()*KEYS_V.length)]}while(n===fk);setFeatured(n);showVerses(1)});
+  /* hadith: one at a time */
+  var hi=-1;
+  function setHadith(i){hi=i;var x=H[i];$("#hdText").textContent=x.t;$("#hdSrc").textContent=x.s;$("#hdMean").textContent="الشرح: "+x.m}
+  $("#newHadith").addEventListener("click",function(){var n;do{n=Math.floor(Math.random()*H.length)}while(n===hi&&H.length>1);setHadith(n)});
+  setHadith(Math.floor(Math.random()*H.length));
+
+  /* quran duas: one at a time */
+  var QD=DUAS.map(function(x){if(x.v){var v=V[x.v];return {t:v.t,r:v.r+(PARTIAL[x.v]?" (جزء من الآية)":""),m:v.m}}return {t:x.t,r:x.r,m:x.m}});
+  var qi=-1;
+  function setQDua(i){qi=i;var x=QD[i];$("#qdText").textContent=x.t;$("#qdRef").textContent=x.r;$("#qdMean").textContent=x.m}
+  $("#newQDua").addEventListener("click",function(){var n;do{n=Math.floor(Math.random()*QD.length)}while(n===qi&&QD.length>1);setQDua(n)});
+  setQDua(0);
+
+  /* adhkar: pick a time, then go through its items one by one */
+  var ai=0,aj=0;
+  function setAdk(){var c=ADK[ai],it=c.items[aj];$("#adkText").textContent=it.t;$("#adkRef").textContent=it.r+(it.c?" · "+it.c:"");$("#adkMean").textContent=it.m;$("#adkCount").textContent=(aj+1)+" من "+c.items.length}
+  ADK.forEach(function(c,i){var b=el("button","chip",c.k);b.setAttribute("aria-pressed",String(i===0));b.addEventListener("click",function(){ai=i;aj=0;$$("#adkChips .chip").forEach(function(x,j){x.setAttribute("aria-pressed",String(j===i))});setAdk()});$("#adkChips").appendChild(b)});
+  $("#adkNext").addEventListener("click",function(){aj=(aj+1)%ADK[ai].items.length;setAdk()});
+  setAdk();
+
+  /* tasbeeh */
+  var D=[{n:"سبحان الله"},{n:"الحمد لله"},{n:"أستغفر الله"}],di=0,counts=[0,0,0],C=2*Math.PI*54,arc=$("#arc");
+  arc.style.strokeDasharray=C;
+  function drawT(){
+    var c=counts[di],r=c%33;
+    $("#count").textContent=ar(c);$("#dhikrName").textContent=D[di].n;
+    arc.style.strokeDashoffset=C*(1-(r===0&&c>0?1:r/33));
+    $("#total").textContent=c>=33?("أكملتي "+ar(Math.floor(c/33))+" × "+ar(33)+" 🤍"):"خطوة خطوة، بالراحة";
+  }
+  D.forEach(function(d,i){
+    var b=el("button","chip",d.n);b.setAttribute("aria-pressed",String(i===0));
+    b.addEventListener("click",function(){di=i;$$("#dhikrChips .chip").forEach(function(x,j){x.setAttribute("aria-pressed",String(j===i))});drawT()});
+    $("#dhikrChips").appendChild(b);
+  });
+  $("#tap").addEventListener("click",function(){counts[di]++;drawT()});
+  $("#reset").addEventListener("click",function(){counts[di]=0;drawT()});
+  drawT();
+
+  var NB=N.map(function(x){var d=el("div","name");d.appendChild(el("b","",x.n));d.appendChild(el("span","",x.m));return d});
+  var nShown=0;
+  function showNames(n){for(var k=0;k<n&&nShown<NB.length;k++){$("#names").appendChild(NB[nShown++])}if(nShown>=NB.length){$("#moreNames").style.display="none"}}
+  $("#moreNames").addEventListener("click",function(){showNames(1)});
+  showNames(4);
+
+  /* gift card */
+  function svg(inner){return "data:image/svg+xml;charset=utf-8,"+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">'+inner+'</svg>')}
+  var ST=[
+    {n:"حمامة",c:"#4F6B7A",u:svg('<path d="M58 120 L20 100 L28 136 Z" fill="#F9CBDA" stroke="#7A5468" stroke-width="4" stroke-linejoin="round"/><ellipse cx="100" cy="124" rx="54" ry="38" fill="#FFFFFF" stroke="#7A5468" stroke-width="4"/><path d="M74 118 Q96 84 128 108 Q104 140 74 118Z" fill="#F9CBDA" stroke="#7A5468" stroke-width="3" stroke-linejoin="round"/><circle cx="140" cy="88" r="27" fill="#FFFFFF" stroke="#7A5468" stroke-width="4"/><path d="M165 86 L188 94 L165 100 Z" fill="#F7B26B" stroke="#7A5468" stroke-width="3" stroke-linejoin="round"/><path d="M92 158 L88 176 M110 158 L110 176 M126 152 L132 172" stroke="#F7B26B" stroke-width="5" stroke-linecap="round"/><circle cx="124" cy="90" r="5" fill="#5A3E4E"/><circle cx="150" cy="90" r="5" fill="#5A3E4E"/><circle cx="125.5" cy="88.2" r="1.7" fill="#FFFFFF"/><circle cx="151.5" cy="88.2" r="1.7" fill="#FFFFFF"/><ellipse cx="114" cy="99" rx="7" ry="4.5" fill="#F4A0B8"/><ellipse cx="160" cy="99" rx="7" ry="4.5" fill="#F4A0B8"/><path d="M131 96 Q137 104 143 96" stroke="#5A3E4E" stroke-width="3" fill="none" stroke-linecap="round"/><path transform="translate(150 36) scale(1.1)" d="M0 8 C-12 -2 -6 -12 0 -4 C6 -12 12 -2 0 8Z" fill="#F4739A" stroke="#7A5468" stroke-width="3" stroke-linejoin="round"/><path d="M34 39 L37.3 46.7 L45 50 L37.3 53.3 L34 61 L30.7 53.3 L23 50 L30.7 46.7 Z" fill="#FFD76E" stroke="#7A5468" stroke-width="2.5" stroke-linejoin="round"/><path d="M172 142 L174.4 147.6 L180 150 L174.4 152.4 L172 158 L169.6 152.4 L164 150 L169.6 147.6 Z" fill="#B9E4F5" stroke="#7A5468" stroke-width="2.5" stroke-linejoin="round"/>')},
+    {n:"وردة",c:"#8A4450",u:svg('<circle cx="100" cy="62" r="27" fill="#F8A5BE" stroke="#7A5468" stroke-width="4"/><circle cx="133" cy="86" r="27" fill="#F8A5BE" stroke="#7A5468" stroke-width="4"/><circle cx="121" cy="125" r="27" fill="#F8A5BE" stroke="#7A5468" stroke-width="4"/><circle cx="79" cy="125" r="27" fill="#F8A5BE" stroke="#7A5468" stroke-width="4"/><circle cx="67" cy="86" r="27" fill="#F8A5BE" stroke="#7A5468" stroke-width="4"/><path d="M100 150 Q96 176 104 192" stroke="#7A5468" stroke-width="9" fill="none" stroke-linecap="round"/><path d="M100 150 Q96 176 104 192" stroke="#8FCB9B" stroke-width="4" fill="none" stroke-linecap="round"/><ellipse cx="78" cy="170" rx="16" ry="8" transform="rotate(-25 78 170)" fill="#8FCB9B" stroke="#7A5468" stroke-width="3"/><ellipse cx="124" cy="172" rx="16" ry="8" transform="rotate(25 124 172)" fill="#8FCB9B" stroke="#7A5468" stroke-width="3"/><circle cx="100" cy="97" r="26" fill="#FFD76E" stroke="#7A5468" stroke-width="4"/><circle cx="87" cy="99" r="5" fill="#5A3E4E"/><circle cx="113" cy="99" r="5" fill="#5A3E4E"/><circle cx="88.5" cy="97.2" r="1.7" fill="#FFFFFF"/><circle cx="114.5" cy="97.2" r="1.7" fill="#FFFFFF"/><ellipse cx="77" cy="108" rx="7" ry="4.5" fill="#F4A0B8"/><ellipse cx="123" cy="108" rx="7" ry="4.5" fill="#F4A0B8"/><path d="M94 105 Q100 113 106 105" stroke="#5A3E4E" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M170 34 L173.0 41.0 L180 44 L173.0 47.0 L170 54 L167.0 47.0 L160 44 L167.0 41.0 Z" fill="#FFFFFF" stroke="#7A5468" stroke-width="2.5" stroke-linejoin="round"/><path transform="translate(30 42) scale(0.9)" d="M0 8 C-12 -2 -6 -12 0 -4 C6 -12 12 -2 0 8Z" fill="#F4739A" stroke="#7A5468" stroke-width="3" stroke-linejoin="round"/>')},
+    {n:"قلب",c:"#8E3B4A",u:svg('<path transform="translate(100 110) scale(6.2)" d="M0 8 C-12 -2 -6 -12 0 -4 C6 -12 12 -2 0 8Z" fill="#F7A1B5" stroke="#7A5468" stroke-width="2.2" stroke-linejoin="round"/><ellipse cx="66" cy="66" rx="9" ry="15" transform="rotate(-28 66 66)" fill="#FFFFFF" opacity=".75"/><circle cx="87" cy="104" r="5" fill="#5A3E4E"/><circle cx="113" cy="104" r="5" fill="#5A3E4E"/><circle cx="88.5" cy="102.2" r="1.7" fill="#FFFFFF"/><circle cx="114.5" cy="102.2" r="1.7" fill="#FFFFFF"/><ellipse cx="77" cy="113" rx="7" ry="4.5" fill="#F4A0B8"/><ellipse cx="123" cy="113" rx="7" ry="4.5" fill="#F4A0B8"/><path d="M94 110 Q100 118 106 110" stroke="#5A3E4E" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M164 34 L167.6 42.4 L176 46 L167.6 49.6 L164 58 L160.4 49.6 L152 46 L160.4 42.4 Z" fill="#FFE28A" stroke="#7A5468" stroke-width="2.5" stroke-linejoin="round"/><path d="M40 141 L42.7 147.3 L49 150 L42.7 152.7 L40 159 L37.3 152.7 L31 150 L37.3 147.3 Z" fill="#FFFFFF" stroke="#7A5468" stroke-width="2.5" stroke-linejoin="round"/><path transform="translate(172 140) scale(0.8)" d="M0 8 C-12 -2 -6 -12 0 -4 C6 -12 12 -2 0 8Z" fill="#FFFFFF" stroke="#7A5468" stroke-width="3" stroke-linejoin="round"/>')},
+    {n:"هلال",c:"#6B5530",u:svg('<path d="M120 34 A70 70 0 1 0 166 138 A56 56 0 1 1 120 34Z" fill="#FFE08A" stroke="#7A5468" stroke-width="4" stroke-linejoin="round"/><circle cx="91" cy="104" r="5" fill="#5A3E4E"/><circle cx="117" cy="104" r="5" fill="#5A3E4E"/><circle cx="92.5" cy="102.2" r="1.7" fill="#FFFFFF"/><circle cx="118.5" cy="102.2" r="1.7" fill="#FFFFFF"/><ellipse cx="81" cy="113" rx="7" ry="4.5" fill="#F4A0B8"/><ellipse cx="127" cy="113" rx="7" ry="4.5" fill="#F4A0B8"/><path d="M98 110 Q104 118 110 110" stroke="#5A3E4E" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M160 32 L163.6 40.4 L172 44 L163.6 47.6 L160 56 L156.4 47.6 L148 44 L156.4 40.4 Z" fill="#FFFFFF" stroke="#7A5468" stroke-width="2.5" stroke-linejoin="round"/><path d="M168 151 L170.7 157.3 L177 160 L170.7 162.7 L168 169 L165.3 162.7 L159 160 L165.3 157.3 Z" fill="#F8B6CF" stroke="#7A5468" stroke-width="2.5" stroke-linejoin="round"/><path transform="translate(44 50) scale(0.8)" d="M0 8 C-12 -2 -6 -12 0 -4 C6 -12 12 -2 0 8Z" fill="#F4739A" stroke="#7A5468" stroke-width="3" stroke-linejoin="round"/>')},
+    {n:"فنجان",c:"#6A4A3A",u:svg('<ellipse cx="98" cy="176" rx="70" ry="11" fill="#FFFFFF" stroke="#7A5468" stroke-width="4"/><path d="M150 104 h12 a18 18 0 0 1 0 36 h-12" stroke="#7A5468" stroke-width="18" fill="none" stroke-linecap="round"/><path d="M150 104 h12 a18 18 0 0 1 0 36 h-12" stroke="#F9B8CB" stroke-width="9" fill="none" stroke-linecap="round"/><path d="M46 92 H150 V126 A44 44 0 0 1 106 170 H90 A44 44 0 0 1 46 126 Z" fill="#F9B8CB" stroke="#7A5468" stroke-width="4" stroke-linejoin="round"/><circle cx="85" cy="130" r="5" fill="#5A3E4E"/><circle cx="111" cy="130" r="5" fill="#5A3E4E"/><circle cx="86.5" cy="128.2" r="1.7" fill="#FFFFFF"/><circle cx="112.5" cy="128.2" r="1.7" fill="#FFFFFF"/><ellipse cx="75" cy="139" rx="7" ry="4.5" fill="#F4A0B8"/><ellipse cx="121" cy="139" rx="7" ry="4.5" fill="#F4A0B8"/><path d="M92 136 Q98 144 104 136" stroke="#5A3E4E" stroke-width="3" fill="none" stroke-linecap="round"/><path transform="translate(72 56) scale(0.9)" d="M0 8 C-12 -2 -6 -12 0 -4 C6 -12 12 -2 0 8Z" fill="#F4739A" stroke="#7A5468" stroke-width="3" stroke-linejoin="round"/><path transform="translate(104 46) scale(0.7)" d="M0 8 C-12 -2 -6 -12 0 -4 C6 -12 12 -2 0 8Z" fill="#FFFFFF" stroke="#7A5468" stroke-width="3" stroke-linejoin="round"/><path d="M176 56 L179.0 63.0 L186 66 L179.0 69.0 L176 76 L173.0 69.0 L166 66 L173.0 63.0 Z" fill="#FFE28A" stroke="#7A5468" stroke-width="2.5" stroke-linejoin="round"/>')},
+    {n:"فراشة",c:"#5E4370",u:svg('<ellipse cx="62" cy="80" rx="40" ry="34" transform="rotate(-20 62 80)" fill="#C9A8E8" stroke="#7A5468" stroke-width="4"/><ellipse cx="138" cy="80" rx="40" ry="34" transform="rotate(20 138 80)" fill="#C9A8E8" stroke="#7A5468" stroke-width="4"/><ellipse cx="72" cy="132" rx="28" ry="24" transform="rotate(20 72 132)" fill="#F4B6D2" stroke="#7A5468" stroke-width="4"/><ellipse cx="128" cy="132" rx="28" ry="24" transform="rotate(-20 128 132)" fill="#F4B6D2" stroke="#7A5468" stroke-width="4"/><circle cx="56" cy="76" r="6" fill="#FFFFFF"/><circle cx="144" cy="76" r="6" fill="#FFFFFF"/><circle cx="68" cy="130" r="6" fill="#FFFFFF"/><circle cx="132" cy="130" r="6" fill="#FFFFFF"/><rect x="95" y="66" width="10" height="92" rx="5" fill="#7A5468"/><path d="M100 68 Q90 42 78 36 M100 68 Q110 42 122 36" stroke="#7A5468" stroke-width="3.5" fill="none" stroke-linecap="round"/><circle cx="78" cy="36" r="5" fill="#FFD76E" stroke="#7A5468" stroke-width="3"/><circle cx="122" cy="36" r="5" fill="#FFD76E" stroke="#7A5468" stroke-width="3"/><path d="M170 150 L173.0 157.0 L180 160 L173.0 163.0 L170 170 L167.0 163.0 L160 160 L167.0 157.0 Z" fill="#FFE28A" stroke="#7A5468" stroke-width="2.5" stroke-linejoin="round"/><path d="M30 152 L32.4 157.6 L38 160 L32.4 162.4 L30 168 L27.6 162.4 L22 160 L27.6 157.6 Z" fill="#FFFFFF" stroke="#7A5468" stroke-width="2.5" stroke-linejoin="round"/>')},
+    {n:"شمس",c:"#8A5A1E",u:svg('<path d="M158.0 100.0 L180.0 100.0" stroke="#7A5468" stroke-width="22" stroke-linecap="round"/><path d="M158.0 100.0 L180.0 100.0" stroke="#FFC861" stroke-width="13" stroke-linecap="round"/><path d="M141.0 141.0 L156.6 156.6" stroke="#7A5468" stroke-width="22" stroke-linecap="round"/><path d="M141.0 141.0 L156.6 156.6" stroke="#FFC861" stroke-width="13" stroke-linecap="round"/><path d="M100.0 158.0 L100.0 180.0" stroke="#7A5468" stroke-width="22" stroke-linecap="round"/><path d="M100.0 158.0 L100.0 180.0" stroke="#FFC861" stroke-width="13" stroke-linecap="round"/><path d="M59.0 141.0 L43.4 156.6" stroke="#7A5468" stroke-width="22" stroke-linecap="round"/><path d="M59.0 141.0 L43.4 156.6" stroke="#FFC861" stroke-width="13" stroke-linecap="round"/><path d="M42.0 100.0 L20.0 100.0" stroke="#7A5468" stroke-width="22" stroke-linecap="round"/><path d="M42.0 100.0 L20.0 100.0" stroke="#FFC861" stroke-width="13" stroke-linecap="round"/><path d="M59.0 59.0 L43.4 43.4" stroke="#7A5468" stroke-width="22" stroke-linecap="round"/><path d="M59.0 59.0 L43.4 43.4" stroke="#FFC861" stroke-width="13" stroke-linecap="round"/><path d="M100.0 42.0 L100.0 20.0" stroke="#7A5468" stroke-width="22" stroke-linecap="round"/><path d="M100.0 42.0 L100.0 20.0" stroke="#FFC861" stroke-width="13" stroke-linecap="round"/><path d="M141.0 59.0 L156.6 43.4" stroke="#7A5468" stroke-width="22" stroke-linecap="round"/><path d="M141.0 59.0 L156.6 43.4" stroke="#FFC861" stroke-width="13" stroke-linecap="round"/><circle cx="100" cy="100" r="44" fill="#FFD76E" stroke="#7A5468" stroke-width="4"/><circle cx="87" cy="104" r="5" fill="#5A3E4E"/><circle cx="113" cy="104" r="5" fill="#5A3E4E"/><circle cx="88.5" cy="102.2" r="1.7" fill="#FFFFFF"/><circle cx="114.5" cy="102.2" r="1.7" fill="#FFFFFF"/><ellipse cx="77" cy="113" rx="7" ry="4.5" fill="#F4A0B8"/><ellipse cx="123" cy="113" rx="7" ry="4.5" fill="#F4A0B8"/><path d="M94 110 Q100 118 106 110" stroke="#5A3E4E" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M32 29 L34.7 35.3 L41 38 L34.7 40.7 L32 47 L29.3 40.7 L23 38 L29.3 35.3 Z" fill="#FFFFFF" stroke="#7A5468" stroke-width="2.5" stroke-linejoin="round"/><path transform="translate(170 168) scale(0.7)" d="M0 8 C-12 -2 -6 -12 0 -4 C6 -12 12 -2 0 8Z" fill="#F4739A" stroke="#7A5468" stroke-width="3" stroke-linejoin="round"/>')},
+    {n:"نجمة",c:"#5B4A7E",u:svg('<polygon points="100.0,28.0 122.3,79.3 178.0,84.7 136.1,121.7 148.2,176.3 100.0,148.0 51.8,176.3 63.9,121.7 22.0,84.7 77.7,79.3" fill="#F3B8E0" stroke="#7A5468" stroke-width="4" stroke-linejoin="round"/><circle cx="87" cy="116" r="5" fill="#5A3E4E"/><circle cx="113" cy="116" r="5" fill="#5A3E4E"/><circle cx="88.5" cy="114.2" r="1.7" fill="#FFFFFF"/><circle cx="114.5" cy="114.2" r="1.7" fill="#FFFFFF"/><ellipse cx="77" cy="125" rx="7" ry="4.5" fill="#F4A0B8"/><ellipse cx="123" cy="125" rx="7" ry="4.5" fill="#F4A0B8"/><path d="M94 122 Q100 130 106 122" stroke="#5A3E4E" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M168 25 L171.3 32.7 L179 36 L171.3 39.3 L168 47 L164.7 39.3 L157 36 L164.7 32.7 Z" fill="#FFE28A" stroke="#7A5468" stroke-width="2.5" stroke-linejoin="round"/><path d="M30 61 L32.7 67.3 L39 70 L32.7 72.7 L30 79 L27.3 72.7 L21 70 L27.3 67.3 Z" fill="#FFFFFF" stroke="#7A5468" stroke-width="2.5" stroke-linejoin="round"/><path transform="translate(160 176) scale(0.7)" d="M0 8 C-12 -2 -6 -12 0 -4 C6 -12 12 -2 0 8Z" fill="#FFFFFF" stroke="#7A5468" stroke-width="3" stroke-linejoin="round"/>')},
+    {n:"فانوس",c:"#7A4B2A",u:svg('<circle cx="100" cy="106" r="86" fill="#FFF1C2" opacity=".45"/><circle cx="100" cy="20" r="7" fill="none" stroke="#7A5468" stroke-width="4"/><rect x="78" y="32" width="44" height="16" rx="7" fill="#E7A88A" stroke="#7A5468" stroke-width="4"/><path d="M72 48 H128 Q146 100 128 152 H72 Q54 100 72 48Z" fill="#FFC48A" stroke="#7A5468" stroke-width="4" stroke-linejoin="round"/><path d="M100 56 V146 M80 60 Q74 100 80 140 M120 60 Q126 100 120 140" stroke="#F09A6A" stroke-width="3" fill="none"/><rect x="78" y="150" width="44" height="16" rx="7" fill="#E7A88A" stroke="#7A5468" stroke-width="4"/><path d="M92 166 L88 184 M100 166 L100 186 M108 166 L112 184" stroke="#7A5468" stroke-width="3" stroke-linecap="round"/><circle cx="87" cy="104" r="5" fill="#5A3E4E"/><circle cx="113" cy="104" r="5" fill="#5A3E4E"/><circle cx="88.5" cy="102.2" r="1.7" fill="#FFFFFF"/><circle cx="114.5" cy="102.2" r="1.7" fill="#FFFFFF"/><ellipse cx="77" cy="113" rx="7" ry="4.5" fill="#F4A0B8"/><ellipse cx="123" cy="113" rx="7" ry="4.5" fill="#F4A0B8"/><path d="M94 110 Q100 118 106 110" stroke="#5A3E4E" stroke-width="3" fill="none" stroke-linecap="round"/><path transform="translate(40 44) scale(0.8)" d="M0 8 C-12 -2 -6 -12 0 -4 C6 -12 12 -2 0 8Z" fill="#F4739A" stroke="#7A5468" stroke-width="3" stroke-linejoin="round"/><path d="M164 40 L167.0 47.0 L174 50 L167.0 53.0 L164 60 L161.0 53.0 L154 50 L161.0 47.0 Z" fill="#FFFFFF" stroke="#7A5468" stroke-width="2.5" stroke-linejoin="round"/>')},
+    {n:"عصفور",c:"#3F6078",u:svg('<path d="M58 118 L24 100 L30 140 Z" fill="#7DBCE0" stroke="#7A5468" stroke-width="4" stroke-linejoin="round"/><path d="M88 150 L84 172 M106 152 L106 174 M122 148 L128 170" stroke="#F7B26B" stroke-width="5" stroke-linecap="round"/><ellipse cx="100" cy="122" rx="50" ry="38" fill="#A8D8F0" stroke="#7A5468" stroke-width="4"/><path d="M72 118 Q96 88 124 112 Q100 140 72 118Z" fill="#7DBCE0" stroke="#7A5468" stroke-width="3" stroke-linejoin="round"/><circle cx="146" cy="90" r="28" fill="#A8D8F0" stroke="#7A5468" stroke-width="4"/><path d="M168 88 L190 96 L168 102 Z" fill="#F7B26B" stroke="#7A5468" stroke-width="3" stroke-linejoin="round"/><path d="M128 62 L108 48 L108 74 Z M138 62 L158 48 L158 74 Z" fill="#F8A5BE" stroke="#7A5468" stroke-width="3" stroke-linejoin="round"/><circle cx="134" cy="62" r="6" fill="#F4739A" stroke="#7A5468" stroke-width="3"/><circle cx="128" cy="94" r="5" fill="#5A3E4E"/><circle cx="154" cy="94" r="5" fill="#5A3E4E"/><circle cx="129.5" cy="92.2" r="1.7" fill="#FFFFFF"/><circle cx="155.5" cy="92.2" r="1.7" fill="#FFFFFF"/><ellipse cx="118" cy="103" rx="7" ry="4.5" fill="#F4A0B8"/><ellipse cx="164" cy="103" rx="7" ry="4.5" fill="#F4A0B8"/><path d="M135 100 Q141 108 147 100" stroke="#5A3E4E" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M36 42 L39.0 49.0 L46 52 L39.0 55.0 L36 62 L33.0 55.0 L26 52 L33.0 49.0 Z" fill="#FFE28A" stroke="#7A5468" stroke-width="2.5" stroke-linejoin="round"/><path transform="translate(168 44) scale(0.8)" d="M0 8 C-12 -2 -6 -12 0 -4 C6 -12 12 -2 0 8Z" fill="#F4739A" stroke="#7A5468" stroke-width="3" stroke-linejoin="round"/>')},
+    {n:"سحابة",c:"#4F6B7A",u:svg('<circle cx="66.0" cy="108.0" r="30.0" fill="#7A5468"/><circle cx="100.0" cy="94.0" r="38.0" fill="#7A5468"/><circle cx="136.0" cy="102.0" r="32.0" fill="#7A5468"/><rect x="30.0" y="108.0" width="140.0" height="44.0" rx="22.0" fill="#7A5468"/><circle cx="66.0" cy="108.0" r="26.0" fill="#FFFFFF"/><circle cx="100.0" cy="94.0" r="34.0" fill="#FFFFFF"/><circle cx="136.0" cy="102.0" r="28.0" fill="#FFFFFF"/><rect x="34.0" y="112.0" width="132.0" height="36.0" rx="18.0" fill="#FFFFFF"/><circle cx="91" cy="108" r="5" fill="#5A3E4E"/><circle cx="117" cy="108" r="5" fill="#5A3E4E"/><circle cx="92.5" cy="106.2" r="1.7" fill="#FFFFFF"/><circle cx="118.5" cy="106.2" r="1.7" fill="#FFFFFF"/><ellipse cx="81" cy="117" rx="7" ry="4.5" fill="#F4A0B8"/><ellipse cx="127" cy="117" rx="7" ry="4.5" fill="#F4A0B8"/><path d="M98 114 Q104 122 110 114" stroke="#5A3E4E" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M36 30 L39.0 37.0 L46 40 L39.0 43.0 L36 50 L33.0 43.0 L26 40 L33.0 37.0 Z" fill="#FFE28A" stroke="#7A5468" stroke-width="2.5" stroke-linejoin="round"/><path d="M172 35 L174.7 41.3 L181 44 L174.7 46.7 L172 53 L169.3 46.7 L163 44 L169.3 41.3 Z" fill="#B9E4F5" stroke="#7A5468" stroke-width="2.5" stroke-linejoin="round"/><path transform="translate(164 166) scale(0.8)" d="M0 8 C-12 -2 -6 -12 0 -4 C6 -12 12 -2 0 8Z" fill="#F4739A" stroke="#7A5468" stroke-width="3" stroke-linejoin="round"/><path transform="translate(34 158) scale(0.6)" d="M0 8 C-12 -2 -6 -12 0 -4 C6 -12 12 -2 0 8Z" fill="#F4739A" stroke="#7A5468" stroke-width="3" stroke-linejoin="round"/>')},
+    {n:"قوس قزح",c:"#6E5A7A",u:svg('<path d="M16 138 A84 84 0 0 1 184 138" fill="none" stroke="#7A5468" stroke-width="20"/><path d="M30 138 A70 70 0 0 1 170 138" fill="none" stroke="#7A5468" stroke-width="20"/><path d="M44 138 A56 56 0 0 1 156 138" fill="none" stroke="#7A5468" stroke-width="20"/><path d="M58 138 A42 42 0 0 1 142 138" fill="none" stroke="#7A5468" stroke-width="20"/><path d="M16 138 A84 84 0 0 1 184 138" fill="none" stroke="#F4847A" stroke-width="12"/><path d="M30 138 A70 70 0 0 1 170 138" fill="none" stroke="#FFD76E" stroke-width="12"/><path d="M44 138 A56 56 0 0 1 156 138" fill="none" stroke="#8FCB9B" stroke-width="12"/><path d="M58 138 A42 42 0 0 1 142 138" fill="none" stroke="#7DBCE0" stroke-width="12"/><circle cx="26.4" cy="149.2" r="14.4" fill="#7A5468"/><circle cx="40.0" cy="143.6" r="17.6" fill="#7A5468"/><circle cx="54.4" cy="146.8" r="15.2" fill="#7A5468"/><rect x="12.0" y="149.2" width="56.0" height="17.6" rx="8.8" fill="#7A5468"/><circle cx="26.4" cy="149.2" r="10.4" fill="#FFFFFF"/><circle cx="40.0" cy="143.6" r="13.6" fill="#FFFFFF"/><circle cx="54.4" cy="146.8" r="11.2" fill="#FFFFFF"/><rect x="13.6" y="150.8" width="52.8" height="14.4" rx="7.2" fill="#FFFFFF"/><circle cx="146.4" cy="149.2" r="14.4" fill="#7A5468"/><circle cx="160.0" cy="143.6" r="17.6" fill="#7A5468"/><circle cx="174.4" cy="146.8" r="15.2" fill="#7A5468"/><rect x="132.0" y="149.2" width="56.0" height="17.6" rx="8.8" fill="#7A5468"/><circle cx="146.4" cy="149.2" r="10.4" fill="#FFFFFF"/><circle cx="160.0" cy="143.6" r="13.6" fill="#FFFFFF"/><circle cx="174.4" cy="146.8" r="11.2" fill="#FFFFFF"/><rect x="133.6" y="150.8" width="52.8" height="14.4" rx="7.2" fill="#FFFFFF"/><circle cx="87" cy="126" r="5" fill="#5A3E4E"/><circle cx="113" cy="126" r="5" fill="#5A3E4E"/><circle cx="88.5" cy="124.2" r="1.7" fill="#FFFFFF"/><circle cx="114.5" cy="124.2" r="1.7" fill="#FFFFFF"/><ellipse cx="77" cy="135" rx="7" ry="4.5" fill="#F4A0B8"/><ellipse cx="123" cy="135" rx="7" ry="4.5" fill="#F4A0B8"/><path d="M94 132 Q100 140 106 132" stroke="#5A3E4E" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M34 30 L37.0 37.0 L44 40 L37.0 43.0 L34 50 L31.0 43.0 L24 40 L31.0 37.0 Z" fill="#FFFFFF" stroke="#7A5468" stroke-width="2.5" stroke-linejoin="round"/><path d="M170 25 L173.3 32.7 L181 36 L173.3 39.3 L170 47 L166.7 39.3 L159 36 L166.7 32.7 Z" fill="#FFE28A" stroke="#7A5468" stroke-width="2.5" stroke-linejoin="round"/><path transform="translate(100 30) scale(0.6)" d="M0 8 C-12 -2 -6 -12 0 -4 C6 -12 12 -2 0 8Z" fill="#F4739A" stroke="#7A5468" stroke-width="3" stroke-linejoin="round"/>')},
+    {n:"قطة",c:"#8A5A3E",u:svg('<path d="M54 96 L50 38 L96 70 Z" fill="#FFD9B0" stroke="#7A5468" stroke-width="4" stroke-linejoin="round"/><path d="M146 96 L150 38 L104 70 Z" fill="#FFD9B0" stroke="#7A5468" stroke-width="4" stroke-linejoin="round"/><path d="M60 84 L60 58 L80 72 Z" fill="#F9B8CB"/><path d="M140 84 L140 58 L120 72 Z" fill="#F9B8CB"/><circle cx="100" cy="116" r="58" fill="#FFD9B0" stroke="#7A5468" stroke-width="4"/><path d="M46 122 L16 116 M46 132 L16 134 M154 122 L184 116 M154 132 L184 134" stroke="#7A5468" stroke-width="3" stroke-linecap="round"/><circle cx="87" cy="116" r="5" fill="#5A3E4E"/><circle cx="113" cy="116" r="5" fill="#5A3E4E"/><circle cx="88.5" cy="114.2" r="1.7" fill="#FFFFFF"/><circle cx="114.5" cy="114.2" r="1.7" fill="#FFFFFF"/><ellipse cx="77" cy="125" rx="7" ry="4.5" fill="#F4A0B8"/><ellipse cx="123" cy="125" rx="7" ry="4.5" fill="#F4A0B8"/><path d="M94 122 Q100 130 106 122" stroke="#5A3E4E" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M170 30 L173.0 37.0 L180 40 L173.0 43.0 L170 50 L167.0 43.0 L160 40 L167.0 37.0 Z" fill="#FFE28A" stroke="#7A5468" stroke-width="2.5" stroke-linejoin="round"/><path transform="translate(32 160) scale(0.8)" d="M0 8 C-12 -2 -6 -12 0 -4 C6 -12 12 -2 0 8Z" fill="#F4739A" stroke="#7A5468" stroke-width="3" stroke-linejoin="round"/><path d="M176 158 L178.4 163.6 L184 166 L178.4 168.4 L176 174 L173.6 168.4 L168 166 L173.6 163.6 Z" fill="#B9E4F5" stroke="#7A5468" stroke-width="2.5" stroke-linejoin="round"/>')},
+    {n:"نحلة",c:"#7A5A1E",u:svg('<ellipse cx="66" cy="72" rx="24" ry="16" transform="rotate(-25 66 72)" fill="#E6F6FF" stroke="#7A5468" stroke-width="4"/><ellipse cx="134" cy="72" rx="24" ry="16" transform="rotate(25 134 72)" fill="#E6F6FF" stroke="#7A5468" stroke-width="4"/><ellipse cx="100" cy="118" rx="56" ry="42" fill="#FFD76E" stroke="#7A5468" stroke-width="4"/><path d="M66 88 Q70 118 66 148 M134 88 Q130 118 134 148" stroke="#7A5468" stroke-width="9" fill="none" stroke-linecap="round"/><path d="M88 78 Q84 56 74 50 M112 78 Q116 56 126 50" stroke="#7A5468" stroke-width="3.5" fill="none" stroke-linecap="round"/><circle cx="74" cy="50" r="5" fill="#F4739A" stroke="#7A5468" stroke-width="3"/><circle cx="126" cy="50" r="5" fill="#F4739A" stroke="#7A5468" stroke-width="3"/><circle cx="87" cy="114" r="5" fill="#5A3E4E"/><circle cx="113" cy="114" r="5" fill="#5A3E4E"/><circle cx="88.5" cy="112.2" r="1.7" fill="#FFFFFF"/><circle cx="114.5" cy="112.2" r="1.7" fill="#FFFFFF"/><ellipse cx="77" cy="123" rx="7" ry="4.5" fill="#F4A0B8"/><ellipse cx="123" cy="123" rx="7" ry="4.5" fill="#F4A0B8"/><path d="M94 120 Q100 128 106 120" stroke="#5A3E4E" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M168 30 L171.0 37.0 L178 40 L171.0 43.0 L168 50 L165.0 43.0 L158 40 L165.0 37.0 Z" fill="#FFFFFF" stroke="#7A5468" stroke-width="2.5" stroke-linejoin="round"/><path transform="translate(34 160) scale(0.8)" d="M0 8 C-12 -2 -6 -12 0 -4 C6 -12 12 -2 0 8Z" fill="#F4739A" stroke="#7A5468" stroke-width="3" stroke-linejoin="round"/>')},
+    {n:"بطة",c:"#7A6A2E",u:svg('<ellipse cx="98" cy="134" rx="64" ry="40" fill="#FFE28A" stroke="#7A5468" stroke-width="4"/><ellipse cx="84" cy="136" rx="26" ry="14" fill="#FFD06B" stroke="#7A5468" stroke-width="3"/><path d="M82 170 L78 186 M114 172 L114 188" stroke="#F7B26B" stroke-width="6" stroke-linecap="round"/><circle cx="138" cy="84" r="34" fill="#FFE28A" stroke="#7A5468" stroke-width="4"/><path d="M168 82 L194 92 L168 100 Z" fill="#F7B26B" stroke="#7A5468" stroke-width="3" stroke-linejoin="round"/><circle cx="121" cy="82" r="5" fill="#5A3E4E"/><circle cx="147" cy="82" r="5" fill="#5A3E4E"/><circle cx="122.5" cy="80.2" r="1.7" fill="#FFFFFF"/><circle cx="148.5" cy="80.2" r="1.7" fill="#FFFFFF"/><ellipse cx="111" cy="91" rx="7" ry="4.5" fill="#F4A0B8"/><ellipse cx="157" cy="91" rx="7" ry="4.5" fill="#F4A0B8"/><path d="M128 88 Q134 96 140 88" stroke="#5A3E4E" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M36 46 L39.0 53.0 L46 56 L39.0 59.0 L36 66 L33.0 59.0 L26 56 L33.0 53.0 Z" fill="#FFFFFF" stroke="#7A5468" stroke-width="2.5" stroke-linejoin="round"/><path transform="translate(36 150) scale(0.8)" d="M0 8 C-12 -2 -6 -12 0 -4 C6 -12 12 -2 0 8Z" fill="#F4739A" stroke="#7A5468" stroke-width="3" stroke-linejoin="round"/><path d="M176 142 L178.4 147.6 L184 150 L178.4 152.4 L176 158 L173.6 152.4 L168 150 L173.6 147.6 Z" fill="#B9E4F5" stroke="#7A5468" stroke-width="2.5" stroke-linejoin="round"/>')}
+  ];
+  var PH=[
+    "يا {n}، تعبك مش هيضيع، وربنا شايفه، وهو اللي يعوّضك خير",
+    "اطمني يا {n}، لسه فيه خير جاي في الطريق بإذن الله، وربنا معاكِ في كل خطوة",
+    "ربنا أقرب لقلبك يا {n} مما تتخيلي، فادعيه بثقة وصدق، ودعواتك مش بتروح",
+    "يا {n}، قلبك في أمان طالما متعلق بالله، وكل وجع بيتحول لأجر وراحة",
+    "اللهم يا {n} اجعل قلبك مطمئنًا، وارزقك من حيث لا تحتسبين، واكتب لك الخير أينما كان",
+    "يا {n}، وجودك نعمة، وفرحتك جاية بإذن الله، فالحمد لله على كل حال",
+    "الله معاكِ يا {n}، ولطفه بيوصلك من حيث لا تحتسبين، فلا تحزني",
+    "يا رب يا {n}، اجعل لكِ من كل ضيق فرجًا، ومن كل همّ مخرجًا، وارزقكِ راحة لا تنقطع",
+    "اللهم يا {n} افرح قلبك بكل خير جاي، واجعل لكِ من كل حاجة حلوة نصيب",
+    "يا {n}، ربنا بيحب يشوفك مبسوطة، فخلي قلبك يفرح واطمني، الفرح قريب بإذن الله",
+    "اللهم أدِم عليكِ يا {n} نعمة الابتسامة، واجعل أيامك كلها بشارات خير",
+    "يا {n}، ربنا اللي فرّح قلوب كتير هو اللي هيفرح قلبك كمان، وإنتي مستنياه",
+    "اللهم يا {n}، لوّن أيامك بالفرح والطمأنينة، واجعل كل صباح يجي معاه حاجة حلوة",
+    "يا {n}، ضحكتك نعمة، وربنا قادر يرجّعهالك أحلى من الأول بإذن الله",
+    "اللهم يا {n} اجعل لكِ في كل يوم سبب فرح صغير، يكبر ويكبر لحد ما يملأ قلبك",
+    "يا {n}، الدنيا فيها حاجات حلوة كتير مستنياكِ، ومفيش فرح جاي إلا بإذن ربنا وتوقيته"
+  ];
+  var TH=[
+    {n:"كريمي",bg:"#FFF8F3",w1:"#F7D6CF",w2:"#DDE9D2",acc:"#B5656E",text:"#5D4E5A",ink:"#8E4A57"},
+    {n:"نعناعي",bg:"#F3FAF2",w1:"#CDEBD3",w2:"#FBE7D4",acc:"#4E8A5C",text:"#2F4A36",ink:"#3B6B48"},
+    {n:"سماوي",bg:"#F2F8FC",w1:"#C6E3F2",w2:"#F4DDE4",acc:"#3F7EA0",text:"#2C4B5E",ink:"#2F6585"},
+    {n:"ليلكي",bg:"#F8F4FC",w1:"#E3D2F0",w2:"#FDE3D6",acc:"#8A5FA0",text:"#4B3A5C",ink:"#6E4585"},
+    {n:"خوخي",bg:"#FFF4EC",w1:"#FAD3B8",w2:"#F9E3A8",acc:"#C96A4A",text:"#5A3A2E",ink:"#A65238"},
+    {n:"ليل وردي",bg:"#3F3443",w1:"#5C4860",w2:"#4A5160",acc:"#F0B8B0",text:"#FBEFEA",ink:"#FBEFEA",dark:true}
+  ];
+  var ti=0,sel=0,imgs=[],CW=1080,CH=1350;
+  var sp2=$("#stickPick");
+  ST.forEach(function(s,i){
+    var b=el("button");b.setAttribute("aria-pressed",String(i===0));b.setAttribute("aria-label",s.n);
+    var im=new Image();im.src=s.u;im.alt=s.n;imgs[i]=im;b.appendChild(im);
+    b.addEventListener("click",function(){sel=i;$$("#stickPick button").forEach(function(x,j){x.setAttribute("aria-pressed",String(j===i))});drawCard()});
+    sp2.appendChild(b);
+  });
+  var tp=$("#themePick");
+  TH.forEach(function(th,i){
+    var b=el("button","chip",th.n);b.setAttribute("aria-pressed",String(i===0));
+    b.addEventListener("click",function(){ti=i;$$("#themePick .chip").forEach(function(x,j){x.setAttribute("aria-pressed",String(j===i))});drawCard()});
+    tp.appendChild(b);
+  });
+  var FN=[
+    {n:"رقعة دافئة",f:"'Aref Ruqaa','Tajawal',serif"},
+    {n:"نسخ هادئ",f:"'Noto Naskh Arabic','Tajawal',serif"},
+    {n:"بسيط عصري",f:"'Tajawal','Noto Naskh Arabic',sans-serif"}
+  ];
+  var fx=0;
+  var fpk=$("#fontPick");
+  FN.forEach(function(x,i){var b=el("button","chip",x.n);b.setAttribute("aria-pressed",String(i===0));b.addEventListener("click",function(){fx=i;$$("#fontPick .chip").forEach(function(y,j){y.setAttribute("aria-pressed",String(j===i))});drawCard()});fpk.appendChild(b)});
+  PH.forEach(function(p,i){var o=el("option","",p.split("{n}").join("الاسم"));o.value=i;$("#gPhrase").appendChild(o)});
+  var cv=$("#giftCanvas"),cx=cv.getContext("2d");
+  function wrap(text,max){
+    var words=text.split(/\s+/),lines=[],cur="";
+    words.forEach(function(w){var t2=cur?cur+" "+w:w;if(cx.measureText(t2).width>max&&cur){lines.push(cur);cur=w}else cur=t2});
+    if(cur)lines.push(cur);return lines;
+  }
+  function mix(a,b,k){var pa=parseInt(a.slice(1),16),pb=parseInt(b.slice(1),16);var ch=function(s){return Math.round(((pa>>s)&255)*(1-k)+((pb>>s)&255)*k)};return "#"+((1<<24)|(ch(16)<<16)|(ch(8)<<8)|ch(0)).toString(16).slice(1)}
+  function fade(h){var n=parseInt(h.slice(1),16);return "rgba("+(n>>16)+","+((n>>8)&255)+","+(n&255)+",0)"}
+  function rr(x,y,w,h,r){cx.beginPath();cx.moveTo(x+r,y);cx.arcTo(x+w,y,x+w,y+h,r);cx.arcTo(x+w,y+h,x,y+h,r);cx.arcTo(x,y+h,x,y,r);cx.arcTo(x,y,x+w,y,r);cx.closePath()}
+  function drawCard(){
+    var T=TH[ti],st=ST[sel];
+    var name=$("#gName").value.trim(),own=$("#gOwn").value.trim();
+        var base=own||PH[+$("#gPhrase").value];
+    var phrase=name?base.split("{n}").join(name):base.split("يا {n}").join("يا قلبي").split("{n}").join("قلبي");
+    cx.globalAlpha=1;cx.fillStyle=T.bg;cx.fillRect(0,0,CW,CH);
+    var g=cx.createRadialGradient(160,140,0,160,140,680);g.addColorStop(0,T.w1);g.addColorStop(1,fade(T.w1));cx.fillStyle=g;cx.fillRect(0,0,CW,CH);
+    g=cx.createRadialGradient(920,1220,0,920,1220,720);g.addColorStop(0,T.w2);g.addColorStop(1,fade(T.w2));cx.fillStyle=g;cx.fillRect(0,0,CW,CH);
+    cx.globalAlpha=.22;cx.fillStyle=T.acc;
+    for(var i=0;i<18;i++){cx.beginPath();cx.arc((i*211)%CW,(i*397+80)%CH,8+(i%4)*5,0,6.2832);cx.fill()}
+    cx.globalAlpha=1;cx.strokeStyle=T.acc;cx.lineWidth=6;rr(44,44,CW-88,CH-88,56);cx.stroke();
+    cx.globalAlpha=.45;cx.lineWidth=2;rr(68,68,CW-136,CH-136,44);cx.stroke();cx.globalAlpha=1;
+        var col=T.dark?T.text:mix(T.ink,st.c||T.ink,0.4);
+    cx.direction="rtl";cx.textAlign="center";cx.textBaseline="alphabetic";cx.fillStyle=col;
+    var size=80,lines;
+    do{cx.font="700 "+size+"px "+FN[fx].f;lines=wrap(phrase,CW-240);if(lines.length<=5)break;size-=6}while(size>48);
+    var lh=Math.round(size*1.42),total=lines.length*lh,STK=380,GAP=36,top=Math.round(640-(STK+GAP+total)/2);
+    var im=imgs[sel];if(im&&im.complete&&im.naturalWidth)cx.drawImage(im,CW/2-STK/2,top,STK,STK);
+    var y=top+STK+GAP+size;
+    lines.forEach(function(l){cx.fillText(l,CW/2,y);y+=lh});
+    cx.fillStyle=T.acc;cx.font="700 34px 'Tajawal',sans-serif";cx.fillText("همسة طمأنينة | Hamsat Tamanina",CW/2,CH-110);
+  }
+  ["gName","gOwn","gPhrase"].forEach(function(id){$("#"+id).addEventListener("input",drawCard);$("#"+id).addEventListener("change",drawCard)});
+  imgs.forEach(function(im){im.addEventListener("load",function(){if(giftReady)drawCard()})});
+  var giftFonts=document.fonts&&document.fonts.load?Promise.all([document.fonts.load("700 80px 'Aref Ruqaa'"),document.fonts.load("700 80px 'Noto Naskh Arabic'"),document.fonts.load("700 34px 'Tajawal'")]).catch(function(){}):Promise.resolve();
+  giftFonts.then(function(){giftReady=true;drawCard()});
+    function note(m){$("#gNote").textContent=m}
+  var lastSavedDataUrl = null;
+  function save(kind){
+    drawCard();
+    var ext=kind==="jpg"?"jpg":"png";
+    var mime=kind==="jpg"?"image/jpeg":"image/png";
+    var nm=($("#gName").value.trim().replace(/[^؀-ۿa-zA-Z0-9 ]/g,"").trim())||"هدية";
+    try{
+      var dataUrl = kind==="jpg" ? cv.toDataURL(mime,0.92) : cv.toDataURL("image/png");
+      lastSavedDataUrl = dataUrl;
+      // Create visible preview for long-press saving on mobile
+      var preview = document.getElementById('giftPreview');
+      if(!preview){
+        preview = document.createElement('div');
+        preview.id='giftPreview';
+        preview.style.cssText='margin-top:16px;text-align:center';
+        document.getElementById('giftCardWrap').appendChild(preview);
+      }
+      preview.innerHTML='<p class="hint" style="margin-bottom:8px">اضغطي مطولاً على الصورة واحفظيها 🤍</p><img src="'+dataUrl+'" style="max-width:100%;border-radius:20px;box-shadow:0 8px 24px rgba(0,0,0,.15);" alt="هدية همسة" />';
+      // Try automatic download
+      var link=document.createElement('a');
+      link.download="هدية-همسة-"+nm+"."+ext;
+      link.href=dataUrl;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      note("اتحفظ الكارت 🤍 لو ماتحملش، اضغطي مطولاً على الصورة اللي ظهرت تحت واحفظيها");
+      preview.scrollIntoView({behavior:'smooth',block:'center'});
+    }catch(e){
+      note("اضغطي مطولاً على الكارت الأصلي واحفظيه كصورة 🤍 - المتصفح منع التحميل المباشر");
+      console.error(e);
+    }
+  }
+  $("#gSavePng").addEventListener("click",function(){save("png")});
+  $("#gSaveJpg").addEventListener("click",function(){save("jpg")});
+  var giftReady=false;
+
+  /* faces */
+  var M={a:'<path d="M14 28 Q24 40 34 28"/>',b:'<path d="M16 30 Q24 36 32 30"/>',c:'<path d="M16 32 H32"/>',d:'<path d="M16 35 Q24 29 32 35"/>',e:'<path d="M16 36 Q24 27 32 36"/><path d="M33 22 q2 4 0 6 q-2 -2 0 -6" fill="currentColor"/>'};
+  var F=[["مبسوطة","a","الحمد لله... فرحتك دي نعمة، وربنا يزيدها.","🌼"],["مرتاحة","b","الراحة دي هدية من ربنا. قولي: الحمد لله.","🤍"],["عادية","c","وده كمان تمام. أيام كتير بتعدّي هادية، وده خير.","🕊️"],["تعبانة","d","تعبك مش هيضيع. وربنا شايفه وعارفه.","🤍"],["مش قادرة","e","حضناكي. مش لازم تبقي قوية دلوقتي. وتقدري ترجعي لتبويب همسة وتكتبي اللي في قلبك.","🕊️"]];
+  F.forEach(function(f,i){
+    var b=el("button","face");b.setAttribute("aria-pressed","false");
+    b.innerHTML='<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><circle cx="24" cy="24" r="21"/><circle cx="17" cy="19" r="1.8" fill="currentColor" stroke="none"/><circle cx="31" cy="19" r="1.8" fill="currentColor" stroke="none"/>'+M[f[1]]+'</svg>';
+    b.appendChild(el("span","",f[0]));
+    b.addEventListener("click",function(){
+      $$("#faces .face").forEach(function(x){x.setAttribute("aria-pressed","false")});b.setAttribute("aria-pressed","true");
+      var r=$("#faceReply");r.innerHTML="";var box=el("div","reply");box.appendChild(el("p","hug",f[2]+" "+f[3]));
+      if(i===4)box.appendChild(hotline());r.appendChild(box);
+    });
+    $("#faces").appendChild(b);
+  });
+
+  var spal=store("ht-palette"); if(spal&&$('.dot[data-p="'+spal+'"]'))setPalette(spal);
+})();
+</script>
+
