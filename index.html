@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="ar" dir="rtl">
+<head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="manifest" href="manifest.json">
@@ -149,13 +150,17 @@ footer .num{font-size:16px}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 @media (max-width:420px){body{font-size:16px}.faces{gap:5px}.face{font-size:12px}.verse{font-size:23px}.reader{font-size:17px}nav button{font-size:14px}.stick{gap:6px}}
 </style>
+</head>
+<body>
 
 <div id="app" dir="rtl" lang="ar">
   <svg width="0" height="0" style="position:absolute" aria-hidden="true">
     <symbol id="flower" viewBox="0 0 30 30"><g fill="var(--accent)" opacity=".85"><circle cx="15" cy="7" r="4.4"/><circle cx="22.6" cy="12.5" r="4.4"/><circle cx="19.7" cy="21.4" r="4.4"/><circle cx="10.3" cy="21.4" r="4.4"/><circle cx="7.4" cy="12.5" r="4.4"/></g><circle cx="15" cy="15" r="3.6" fill="var(--card)"/></symbol>
   </svg>
 
-  <p class="topline">اللهم اجعل هذا العمل خالصا لوجهك الكريم</p>
+  <p class="topline" style="margin-bottom:1px;padding-top:8px">اللهم اجعل هذا العمل خالصا لوجهك الكريم</p>
+  <p style="text-align:center;font-size:24px;margin:0;line-height:1;color:var(--accent)">♥</p>
+  <p class="topline" style="margin-top:1px;padding-top:0">الحمد لله الذي هدانا لهذا وما كنا لنهتدي لولا أن هدانا الله</p>
   <header>
     <h1 class="brand">همسة طمأنينة</h1>
     <div class="brand-en">Hamsat Tamanina</div>
@@ -809,6 +814,12 @@ var S=[
   var spal=store("ht-palette"); if(spal&&$('.dot[data-p="'+spal+'"]'))setPalette(spal);
 })();
 </script>
-<script>if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js').catch(function(){});}</script>
+
+<div style="text-align:center; margin:22px 0 8px;">
+  <img src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fmeromm699-stack.github.io%2Fhamsat-tamanina%2F&count_bg=%23A9636C&title_bg=%23FFF8F3&title=%D9%82%D9%84%D8%A8&edge_flat=false"
+       alt="عداد" style="height:26px; border-radius:999px;" />
+</div>
+
+<script>if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js?v=4').catch(function(){});}</script>
 </body>
 </html>
