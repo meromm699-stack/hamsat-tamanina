@@ -812,27 +812,12 @@ var S=[
   var spal=store("ht-palette"); if(spal&&$('.dot[data-p="'+spal+'"]'))setPalette(spal);
 })();
 </script>
-<script>if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js').catch(function(){});}</script>
 
-<!-- عداد ظاهر للبنات - بصورة مضمونة 100% -->
-<div id="hamsa-counter" style="text-align:center; margin:18px 0 8px;">
-  <img src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fmeromm699-stack.github.io%2Fhamsat-tamanina%2F&count_bg=%23A9636C&title_bg=%23FFF8F3&icon=&icon_color=%23FFFFFF&title=%D9%82%D9%84%D8%A8%20%D8%B2%D8%A7%D8%B1%20%D9%87%D9%85%D8%B3%D8%A9&edge_flat=false"
-       alt="عداد القلوب"
-       style="height:28px; border-radius:999px; box-shadow:0 4px 12px rgba(169,99,108,.15);"
-       onerror="this.style.display='none'; document.getElementById('hamsa-counter-text').style.display='block';" />
-  <div id="hamsa-counter-text" style="display:none; font-family:'Tajawal',sans-serif; color:#A9636C; font-weight:700; font-size:15px; background:var(--soft); padding:10px 14px; border-radius:999px; border:1px solid var(--line);">🤍 همسة طمأنينة - بيت يطمن القلوب 🕊️</div>
+<div style="text-align:center; margin:22px 0 8px;">
+  <img src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fmeromm699-stack.github.io%2Fhamsat-tamanina%2F&count_bg=%23A9636C&title_bg=%23FFF8F3&title=%D9%82%D9%84%D8%A8&edge_flat=false"
+       alt="عداد" style="height:26px; border-radius:999px;" />
 </div>
 
-<script>
-// منع الـ cache للعداد عشان يعد كل مرة
-(function(){
-  var img = document.querySelector('#hamsa-counter img');
-  if(img){
-    var src = img.getAttribute('src').split('&t=')[0];
-    img.src = src + '&t=' + Date.now();
-  }
-})();
-</script>
-
+<script>if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js?v=4').catch(function(){});}</script>
 </body>
 </html>
