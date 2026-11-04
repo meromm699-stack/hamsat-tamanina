@@ -274,7 +274,7 @@ footer .num{font-size:16px}
       <select id="gPhrase"></select>
       <label class="lab" for="gOwn">أو اكتبي عبارتك، وحطي {n} مكان الاسم</label>
       <input type="text" id="gOwn" maxlength="140" placeholder="مثلاً: يا {n}، ربنا معاكِ في كل خطوة" autocomplete="off">
-      <div class="cwrap"><canvas id="giftCanvas" width="1080" height="1350" aria-label="معاينة الكارت"></canvas></div>
+      <div class="cwrap"><div id="giftCardWrap"><canvas id="giftCanvas" width="1080" height="1350" aria-label="معاينة الكارت"></canvas></div></div>
       <div class="row" style="justify-content:center">
         <button class="btn" id="gSavePng">حمّلي PNG (أعلى جودة)</button>
         <button class="btn ghost" id="gSaveJpg">حمّلي JPG</button>
@@ -779,18 +779,20 @@ var S=[
   imgs.forEach(function(im){im.addEventListener("load",function(){if(giftReady)drawCard()})});
   var giftFonts=document.fonts&&document.fonts.load?Promise.all([document.fonts.load("700 80px 'Aref Ruqaa'"),document.fonts.load("700 80px 'Noto Naskh Arabic'"),document.fonts.load("700 34px 'Tajawal'")]).catch(function(){}):Promise.resolve();
   giftFonts.then(function(){giftReady=true;drawCard()});
-  var DL=null;
-  try{if(window.claude&&window.claude.use)window.claude.use("downloads").then(function(d){DL=d;if(!d)note("الحفظ المباشر غير متاح هنا. اضغطي مطولاً على الكارت لحفظه كصورة.")},function(){})}catch(e){}
   function note(m){$("#gNote").textContent=m}
   function save(kind){
     drawCard();
-    if(!DL){note("الحفظ المباشر غير متاح هنا. اضغطي مطولاً على الكارت لحفظه كصورة.");return}
     var ext=kind==="jpg"?"jpg":"png",mime=kind==="jpg"?"image/jpeg":"image/png";
-    cv.toBlob(function(b){
-      if(!b){note("تعذر تجهيز الصورة، جرّبي مرة تانية.");return}
-      var nm=($("#gName").value.trim().replace(/[^؀-ۿa-zA-Z0-9 ]/g,"").trim())||"هدية";
-      DL.save({filename:"هدية-همسة-"+nm+"."+ext,data:b}).then(function(){note("اتحفظ الكارت 🤍")},function(e){note(e&&e.code==="declined"?"تمام، مفيش حفظ.":"تعذر الحفظ هنا. اضغطي مطولاً على الكارت لحفظه.")});
-    },mime,kind==="jpg"?0.95:undefined);
+    var nm=($("#gName").value.trim().replace(/[^؀-ۿa-zA-Z0-9 ]/g,"").trim())||"هدية";
+    var dataUrl=kind==="jpg"?cv.toDataURL(mime,0.92):cv.toDataURL("image/png");
+    var preview=document.getElementById("giftPreview");
+    if(!preview){preview=document.createElement("div");preview.id="giftPreview";preview.style.cssText="margin-top:16px;text-align:center";document.getElementById("giftCardWrap").appendChild(preview);}
+    preview.innerHTML='<p class="hint" style="margin-bottom:8px">اضغطي مطولاً على الصورة واحفظيها 🤍</p><img src="'+dataUrl+'" style="max-width:100%;border-radius:20px;box-shadow:0 8px 24px rgba(0,0,0,.15);" alt="هدية همسة" />';
+    var link=document.createElement("a");
+    link.href=dataUrl;link.download="هدية-همسة-"+nm+"."+ext;
+    try{link.click();note("اتحفظ الكارت 🤍 لو ماتحملش، اضغطي مطولاً على الصورة اللي ظهرت تحت واحفظيها");}
+    catch(e){note("اضغطي مطولاً على الصورة تحت واحفظيها 🤍");}
+    preview.scrollIntoView({behavior:"smooth",block:"center"});
   }
   $("#gSavePng").addEventListener("click",function(){save("png")});
   $("#gSaveJpg").addEventListener("click",function(){save("jpg")});
