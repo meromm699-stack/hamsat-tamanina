@@ -158,7 +158,11 @@ footer .num{font-size:16px}
     <symbol id="flower" viewBox="0 0 30 30"><g fill="var(--accent)" opacity=".85"><circle cx="15" cy="7" r="4.4"/><circle cx="22.6" cy="12.5" r="4.4"/><circle cx="19.7" cy="21.4" r="4.4"/><circle cx="10.3" cy="21.4" r="4.4"/><circle cx="7.4" cy="12.5" r="4.4"/></g><circle cx="15" cy="15" r="3.6" fill="var(--card)"/></symbol>
   </svg>
 
-  <p class="topline">اللهم اجعل هذا العمل خالصا لوجهك الكريم</p>
+  <div style="text-align:center; display:flex; flex-direction:column; align-items:center; gap:6px; margin-bottom:4px;">
+    <p class="topline" style="margin:0; padding-top:8px;">اللهم اجعل هذا العمل خالصا لوجهك الكريم</p>
+    <span style="color:var(--accent); font-size:18px; line-height:1;">♥</span>
+    <p class="topline" style="margin:0; padding:0;">الحمد لله الذي هدانا لهذا وما كنا لنهتدي لولا أن هدانا الله</p>
+  </div>
   <header>
     <h1 class="brand">همسة طمأنينة</h1>
     <div class="brand-en">Hamsat Tamanina</div>
@@ -777,17 +781,21 @@ var S=[
   imgs.forEach(function(im){im.addEventListener("load",function(){if(giftReady)drawCard()})});
   var giftFonts=document.fonts&&document.fonts.load?Promise.all([document.fonts.load("700 80px 'Aref Ruqaa'"),document.fonts.load("700 80px 'Noto Naskh Arabic'"),document.fonts.load("700 34px 'Tajawal'")]).catch(function(){}):Promise.resolve();
   giftFonts.then(function(){giftReady=true;drawCard()});
-  var DL=null;
-  try{if(window.claude&&window.claude.use)window.claude.use("downloads").then(function(d){DL=d;if(!d)note("الحفظ المباشر غير متاح هنا. اضغطي مطولاً على الكارت لحفظه كصورة.")},function(){})}catch(e){}
   function note(m){$("#gNote").textContent=m}
   function save(kind){
     drawCard();
-    if(!DL){note("الحفظ المباشر غير متاح هنا. اضغطي مطولاً على الكارت لحفظه كصورة.");return}
     var ext=kind==="jpg"?"jpg":"png",mime=kind==="jpg"?"image/jpeg":"image/png";
     cv.toBlob(function(b){
       if(!b){note("تعذر تجهيز الصورة، جرّبي مرة تانية.");return}
       var nm=($("#gName").value.trim().replace(/[^؀-ۿa-zA-Z0-9 ]/g,"").trim())||"هدية";
-      DL.save({filename:"هدية-همسة-"+nm+"."+ext,data:b}).then(function(){note("اتحفظ الكارت 🤍")},function(e){note(e&&e.code==="declined"?"تمام، مفيش حفظ.":"تعذر الحفظ هنا. اضغطي مطولاً على الكارت لحفظه.")});
+      var url=URL.createObjectURL(b);
+      var a=document.createElement("a");
+      a.href=url;
+      a.download="هدية-همسة-"+nm+"."+ext;
+      document.body.appendChild(a);
+      a.click();
+      setTimeout(function(){URL.revokeObjectURL(url); a.remove();},1200);
+      note("اتحفظ الكارت 🤍");
     },mime,kind==="jpg"?0.95:undefined);
   }
   $("#gSavePng").addEventListener("click",function(){save("png")});
@@ -813,24 +821,13 @@ var S=[
 })();
 </script>
 
-<!-- عداد ظاهر - آمن ومش بيسبب بلوك انستجرام -->
-<div style="text-align:center; margin:22px 0 10px;">
-  <span style="display:inline-flex; align-items:center; gap:6px; background:var(--card); border:1.5px solid var(--line); border-radius:999px; padding:8px 18px; font-size:14px; color:var(--accent); box-shadow:var(--shadow);">
-    <span>🕊️</span>
-    <span id="hamsa-visits">—</span>
-    <span>قلب زار همسة</span>
+<div style="text-align:center; margin:28px 0 14px;">
+  <span style="display:inline-flex; align-items:center; gap:8px; background:var(--card); border:1.5px solid var(--line); border-radius:999px; padding:8px 16px; font-size:14px; color:var(--accent); box-shadow:var(--shadow);">
+    🕊️ عدد الزوار
+    <img src="https://hamsat-tamanina.goatcounter.com/counter/total.svg" alt="عداد" style="height:20px; vertical-align:middle; border-radius:6px;" loading="lazy">
   </span>
 </div>
-<script>
-// عداد ظاهر خفيف - لو فشل يظهر كلمة كثير ومش بيبوظ الصفحة
-try{
-  fetch('https://api.countapi.xyz/hit/hamsat-tamanina-github/visits')
-    .then(r=>r.json())
-    .then(d=>{ var el=document.getElementById('hamsa-visits'); if(el) el.textContent=d.value; })
-    .catch(()=>{ var el=document.getElementById('hamsa-visits'); if(el) el.textContent='كثير'; });
-}catch(e){}
-</script>
 
-<script>if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js').catch(function(){});}</script>
+<script>if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js?v=10').catch(function(){});}</script>
 </body>
 </html>
