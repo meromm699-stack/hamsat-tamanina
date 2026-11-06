@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="manifest" href="data:application/json;base64,ewogICJuYW1lIjogItmH2YXYs9ipINi32YXYo9mG2YrZhtipIiwKICAic2hvcnRfbmFtZSI6ICLZh9mF2LPYqSIsCiAgImRlc2NyaXB0aW9uIjogItmH2YXYs9ipINi32YXYo9mG2YrZhtipIC0g2KrYtdio2K3ZiNinINi52YTZiSDZg9mEINit2KfYrNipINis2YXZitmE2KkiLAogICJzdGFydF91cmwiOiAiLi8iLAogICJkaXNwbGF5IjogInN0YW5kYWxvbmUiLAogICJiYWNrZ3JvdW5kX2NvbG9yIjogIiNGRkY4RjAiLAogICJ0aGVtZV9jb2xvciI6ICIjRDhCNUZGIiwKICAiaWNvbnMiOiBbCiAgICB7CiAgICAgICJzcmMiOiAiaWNvbi0xOTIucG5nIiwKICAgICAgInNpemVzIjogIjE5MngxOTIiLAogICAgICAidHlwZSI6ICJpbWFnZS9wbmciLAogICAgICAicHVycG9zZSI6ICJhbnkgbWFza2FibGUiCiAgICB9LAogICAgewogICAgICAic3JjIjogImljb24tNTEyLnBuZyIsCiAgICAgICJzaXplcyI6ICI1MTJ4NTEyIiwKICAgICAgInR5cGUiOiAiaW1hZ2UvcG5nIiwKICAgICAgInB1cnBvc2UiOiAiYW55IG1hc2thYmxlIgogICAgfSwKICAgIHsKICAgICAgInNyYyI6ICJpY29uLTE4MC5wbmciLAogICAgICAic2l6ZXMiOiAiMTgweDE4MCIsCiAgICAgICJ0eXBlIjogImltYWdlL3BuZyIsCiAgICAgICJwdXJwb3NlIjogImFueSIKICAgIH0sCiAgICB7CiAgICAgICJzcmMiOiAiaWNvbi0xMDI0LnBuZyIsCiAgICAgICJzaXplcyI6ICIxMDI0eDEwMjQiLAogICAgICAidHlwZSI6ICJpbWFnZS9wbmciLAogICAgICAicHVycG9zZSI6ICJhbnkiCiAgICB9CiAgXQp9">
+<link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#A9636C">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="همسة طمأنينة">
@@ -823,10 +823,18 @@ var S=[
 <div style="text-align:center; margin:28px 0 14px;">
   <span style="display:inline-flex; align-items:center; gap:8px; background:var(--card); border:1.5px solid var(--line); border-radius:999px; padding:8px 16px; font-size:14px; color:var(--accent); box-shadow:var(--shadow);">
     🕊️ عدد الزوار
-    <img src="https://hamsat-tamanina.goatcounter.com/counter/total.svg" alt="عداد" style="height:20px; vertical-align:middle; border-radius:6px;" loading="lazy">
+    <span id="hamsa-visits" style="font-weight:700; min-width:24px; text-align:center;">—</span>
   </span>
 </div>
+<script>
+try{
+  fetch('https://api.countapi.xyz/hit/hamsat-tamanina-github-v2/visits')
+    .then(r=>r.json())
+    .then(d=>{ var el=document.getElementById('hamsa-visits'); if(el) el.textContent=d.value.toLocaleString('ar-EG'); })
+    .catch(()=>{ var el=document.getElementById('hamsa-visits'); if(el) el.textContent='—'; });
+}catch(e){}
+</script>
 
-<script>if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js?v=10').catch(function(){});}</script>
+<script>if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js?v=11').catch(function(){});}</script>
 </body>
 </html>
